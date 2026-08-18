@@ -1,102 +1,85 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+'use client';
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+import { useEffect, useState, FormEvent } from 'react';
+import type { HealthResponse, ActivityItem } from '@repo/types';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [health, setHealth] = useState<HealthResponse | null>(null);
+  const [items, setItems] = useState<ActivityItem[]>([]);
+  const [inputTitle, setInputTitle] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.dev/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.dev?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.dev →
-        </a>
-      </footer>
+  // Load the initial backend data matrices
+  useEffect(() => {
+    Promise.all([
+      fetch('http://localhost:5001/api/system/health').then(res => res.json()),
+      fetch('http://localhost:5001/api/system/activities').then(res => res.json())
+    ])
+      .then(([healthData, listItems]: [HealthResponse, ActivityItem[]]) => {
+        setHealth(healthData);
+        setItems(listItems);
+      })
+      .catch((err) => setError(err.message));
+  }, []);
+
+  // Form submit function handler pushing state loop mutations to Express
+  const handleAddItem = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!inputTitle.trim()) return;
+
+    try {
+      // LINE 30: Changed from 5000 to 5001 to match your new environment variables port!
+      const res = await fetch('http://localhost:5001/api/system/activities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: inputTitle })
+      });
+
+      if (!res.ok) throw new Error('Failed to push state item upstream');
+      const addedItem: ActivityItem = await res.json();
+      
+      // Update local state loop by appending the server's authorized entity response
+      setItems((prev) => [...prev, addedItem]);
+      setInputTitle('');
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  return (
+    <div style={{ padding: '3rem', fontFamily: 'system-ui, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+      <h1>Softwarewolf Dashboard Loop</h1>
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+
+      {/* Box 1: Health Tracker Status Display */}
+      <div style={{ padding: '1rem', border: '1px solid #eee', borderRadius: '8px', marginBottom: '1.5rem' }}>
+        Status: <strong style={{ color: 'green' }}>{health?.status || 'Connecting...'}</strong>
+        <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#666' }}>{health?.message}</p>
+      </div>
+
+      {/* Box 2: Mutatable State Input Interface Form */}
+      <form onSubmit={handleAddItem} style={{ display: 'flex', gap: '8px', marginBottom: '2rem' }}>
+        <input
+          type="text"
+          value={inputTitle}
+          onChange={(e) => setInputTitle(e.target.value)}
+          placeholder="Log a system event..."
+          style={{ flex: 1, padding: '10px', border: '1px solid #ccc', borderRadius: '6px', fontSize: '15px' }}
+        />
+        <button type="submit" style={{ padding: '10px 16px', background: '#0070f3', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
+          Submit State
+        </button>
+      </form>
+
+      {/* Box 3: Live Synchronized Active List Stream rendering */}
+      <h3>Live Activity Stream logs:</h3>
+      <ul style={{ paddingLeft: '1.2rem', lineHeight: '1.8' }}>
+        {items.map((item) => (
+          <li key={item.id}>
+            <span>{item.title}</span> — <small style={{ color: '#888' }}>{new Date(item.createdAt).toLocaleTimeString()}</small>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
