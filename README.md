@@ -1,3 +1,6 @@
+# About this project
+Awhile back I experimented with WordPress to see what that was like and to build out a hobby website. I did build it out, https://softwarewolf.org/, but WordPress turned out to be awful and WordPress security issues are so bad I would encourage everyone to avoid it. Anyway, after that experiment failed I started to work on a new website with my own client and server. When I have enough of this built out I'll replace the the crappy WordPress site with this.
+
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
