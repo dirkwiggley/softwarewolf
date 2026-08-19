@@ -1,6 +1,9 @@
 # About this project
 Awhile back I experimented with WordPress to see what that was like and to build out a hobby website. I did build it out, https://softwarewolf.org/, but WordPress turned out to be awful and WordPress security issues are so bad I would encourage everyone to avoid it. Anyway, after that experiment failed I started to work on a new website with my own client and server. When I have enough of this built out I'll replace the the crappy WordPress site with this.
 
+# A few notes
+My hosting service would make me pay extra to use Docker and PgSQL so I'm going cheap and using MariaDB with Prisma for the DB. Since Prisma _should_ allow you to connect to the db of your choice I thought it would be OK to use.
+
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
