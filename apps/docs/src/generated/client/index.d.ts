@@ -1115,6 +1115,7 @@ export namespace Prisma {
     username: string | null
     displayName: string | null
     email: string | null
+    password: string | null
     role: $Enums.Role | null
     createdAt: Date | null
   }
@@ -1124,6 +1125,7 @@ export namespace Prisma {
     username: string | null
     displayName: string | null
     email: string | null
+    password: string | null
     role: $Enums.Role | null
     createdAt: Date | null
   }
@@ -1133,6 +1135,7 @@ export namespace Prisma {
     username: number
     displayName: number
     email: number
+    password: number
     role: number
     createdAt: number
     _all: number
@@ -1144,6 +1147,7 @@ export namespace Prisma {
     username?: true
     displayName?: true
     email?: true
+    password?: true
     role?: true
     createdAt?: true
   }
@@ -1153,6 +1157,7 @@ export namespace Prisma {
     username?: true
     displayName?: true
     email?: true
+    password?: true
     role?: true
     createdAt?: true
   }
@@ -1162,6 +1167,7 @@ export namespace Prisma {
     username?: true
     displayName?: true
     email?: true
+    password?: true
     role?: true
     createdAt?: true
     _all?: true
@@ -1244,6 +1250,7 @@ export namespace Prisma {
     username: string
     displayName: string
     email: string
+    password: string
     role: $Enums.Role
     createdAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1270,6 +1277,7 @@ export namespace Prisma {
     username?: boolean
     displayName?: boolean
     email?: boolean
+    password?: boolean
     role?: boolean
     createdAt?: boolean
     activities?: boolean | User$activitiesArgs<ExtArgs>
@@ -1283,11 +1291,12 @@ export namespace Prisma {
     username?: boolean
     displayName?: boolean
     email?: boolean
+    password?: boolean
     role?: boolean
     createdAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "displayName" | "email" | "role" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "displayName" | "email" | "password" | "role" | "createdAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     activities?: boolean | User$activitiesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1303,6 +1312,7 @@ export namespace Prisma {
       username: string
       displayName: string
       email: string
+      password: string
       role: $Enums.Role
       createdAt: Date
     }, ExtArgs["result"]["user"]>
@@ -1679,6 +1689,7 @@ export namespace Prisma {
     readonly username: FieldRef<"User", 'String'>
     readonly displayName: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
   }
@@ -3919,6 +3930,7 @@ export namespace Prisma {
     username: 'username',
     displayName: 'displayName',
     email: 'email',
+    password: 'password',
     role: 'role',
     createdAt: 'createdAt'
   };
@@ -3959,7 +3971,8 @@ export namespace Prisma {
     id: 'id',
     username: 'username',
     displayName: 'displayName',
-    email: 'email'
+    email: 'email',
+    password: 'password'
   };
 
   export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -4036,6 +4049,7 @@ export namespace Prisma {
     username?: StringFilter<"User"> | string
     displayName?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     activities?: ActivityListRelationFilter
@@ -4046,6 +4060,7 @@ export namespace Prisma {
     username?: SortOrder
     displayName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     activities?: ActivityOrderByRelationAggregateInput
@@ -4060,6 +4075,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     displayName?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     activities?: ActivityListRelationFilter
@@ -4070,6 +4086,7 @@ export namespace Prisma {
     username?: SortOrder
     displayName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -4085,6 +4102,7 @@ export namespace Prisma {
     username?: StringWithAggregatesFilter<"User"> | string
     displayName?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
+    password?: StringWithAggregatesFilter<"User"> | string
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -4198,6 +4216,7 @@ export namespace Prisma {
     username: string
     displayName: string
     email: string
+    password?: string
     role?: $Enums.Role
     createdAt?: Date | string
     activities?: ActivityCreateNestedManyWithoutUserInput
@@ -4208,6 +4227,7 @@ export namespace Prisma {
     username: string
     displayName: string
     email: string
+    password?: string
     role?: $Enums.Role
     createdAt?: Date | string
     activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
@@ -4218,6 +4238,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     displayName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activities?: ActivityUpdateManyWithoutUserNestedInput
@@ -4228,6 +4249,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     displayName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
@@ -4238,6 +4260,7 @@ export namespace Prisma {
     username: string
     displayName: string
     email: string
+    password?: string
     role?: $Enums.Role
     createdAt?: Date | string
   }
@@ -4247,6 +4270,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     displayName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4256,6 +4280,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     displayName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4418,6 +4443,7 @@ export namespace Prisma {
     username?: SortOrder
     displayName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
   }
@@ -4427,6 +4453,7 @@ export namespace Prisma {
     username?: SortOrder
     displayName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
   }
@@ -4436,6 +4463,7 @@ export namespace Prisma {
     username?: SortOrder
     displayName?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
   }
@@ -4839,6 +4867,7 @@ export namespace Prisma {
     username: string
     displayName: string
     email: string
+    password?: string
     role?: $Enums.Role
     createdAt?: Date | string
   }
@@ -4848,6 +4877,7 @@ export namespace Prisma {
     username: string
     displayName: string
     email: string
+    password?: string
     role?: $Enums.Role
     createdAt?: Date | string
   }
@@ -4873,6 +4903,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     displayName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4882,6 +4913,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     displayName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

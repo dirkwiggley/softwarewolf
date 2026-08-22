@@ -1,58 +1,121 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
-interface UserProfile {
-  id: string;
-  username: string;
-  role: 'ADMIN' | 'MANAGER' | 'USER';
+export interface UserSessionProfile {
+  id: string | null;
+  username: string | null;
+  displayName: string;
+  email: string | null;
+  role: 'ADMIN' | 'MANAGER' | 'USER' | 'GUEST';
 }
 
 interface SecurityContextType {
-  activeUserId: string;
-  setActiveUserId: (id: string) => void;
-  userProfile: UserProfile | null;
+  activeUserId: string | null;
+  userProfile: UserSessionProfile | null;
   loading: boolean;
+  loginUser: (username: string) => Promise<boolean>;
+  logoutUser: () => Promise<void>;
 }
 
 const SecurityContext = createContext<SecurityContextType | undefined>(undefined);
 
-export function SecurityProvider({ children }: { children: ReactNode }) {
-  const [activeUserId, setActiveUserId] = useState<string>('');
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(false);
+export const SecurityProvider = ({ children }: { children: React.ReactNode }) => {
+  const [activeUserId, setActiveUserId] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<UserSessionProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
 
+  // Background identity check on component initialization
   useEffect(() => {
-    // Sync the context to check who the active user is whenever the ID changes
-    if (!activeUserId) {
-      setUserProfile(null);
-      return;
-    }
+    const verifyIdentitySession = async () => {
+      try {
+        const response = await fetch('/api/system/auth/me');
+        if (response.ok) {
+          const profile: UserSessionProfile = await response.json();
+          setActiveUserId(profile.id);
+          setUserProfile(profile);
+        } else {
+          // Fallback strategy: Assign Guest profile if the network call rejects
+          setActiveUserId(null);
+          setUserProfile({
+            id: null,
+            username: null,
+            displayName: 'Anonymous Guest',
+            email: null,
+            role: 'GUEST'
+          });
+        }
+      } catch (error) {
+        // Network failure fallback
+        setActiveUserId(null);
+        setUserProfile({
+          id: null,
+          username: null,
+          displayName: 'Anonymous Guest',
+          email: null,
+          role: 'GUEST'
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setLoading(true);
-    fetch('/api/system/users', { headers: { 'x-mock-user-id': activeUserId } })
-      .then((res) => {
-        if (!res.ok) throw new Error('Unauthorized');
-        return res.json();
-      })
-      .then((users: UserProfile[]) => {
-        // Find the logged-in profile context details out of the directory list
-        const activeUser = users.find((u) => u.id === activeUserId);
-        setUserProfile(activeUser || null);
-      })
-      .catch(() => setUserProfile(null))
-      .finally(() => setLoading(false));
-  }, [activeUserId]);
+    verifyIdentitySession();
+  }, [pathname]);
+
+  const loginUser = async (username: string) => {
+    try {
+      const response = await fetch('/api/system/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      });
+
+      if (response.ok) {
+        const profile: UserSessionProfile = await response.json();
+        setActiveUserId(profile.id);
+        setUserProfile(profile);
+        router.push('/home');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const logoutUser = async () => {
+    try {
+      await fetch('/api/system/auth/logout', { method: 'POST' });
+    } catch (error) {
+      console.error('Logout sync error:', error);
+    } finally {
+      setActiveUserId(null);
+      setUserProfile({
+        id: null,
+        username: null,
+        displayName: 'Anonymous Guest',
+        email: null,
+        role: 'GUEST'
+      });
+      router.push('/login');
+    }
+  };
 
   return (
-    <SecurityContext.Provider value={{ activeUserId, setActiveUserId, userProfile, loading }}>
+    <SecurityContext.Provider value={{ activeUserId, userProfile, loading, loginUser, logoutUser }}>
       {children}
     </SecurityContext.Provider>
   );
-}
+};
 
-export function useSecurity() {
+export const useSecurity = () => {
   const context = useContext(SecurityContext);
-  if (!context) throw new Error('useSecurity must be used within a SecurityProvider');
+  if (!context) {
+    throw new Error('useSecurity must be encapsulated inside a valid SecurityProvider framework');
+  }
   return context;
-}
+};

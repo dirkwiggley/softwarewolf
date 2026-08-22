@@ -2,7 +2,7 @@
 
 import { useEffect, useState, FormEvent } from 'react';
 import Link from 'next/link';
-import PageGuard from '../pageGuard'; // <-- Import our frontend gatekeeper
+import PageGuard from '../PageGuard'; // <-- Import our frontend gatekeeper
 import type { HealthResponse, ActivityItem } from '@repo/types';
 
 export default function DashboardPage() {

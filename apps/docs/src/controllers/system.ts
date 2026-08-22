@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import type { HealthResponse } from '@repo/types';
-import prisma from '../db.js'; // <-- Import our new client runner
+import prisma from '../db.js';
 
 // 1. GET /api/system/health - Static application metric check
 export const getSystemHealth = (req: Request, res: Response<HealthResponse>) => {
@@ -13,7 +13,6 @@ export const getSystemHealth = (req: Request, res: Response<HealthResponse>) => 
 // 2. GET /api/system/activities - Read your live data stream logs from MariaDB
 export const getActivities = async (req: Request, res: Response) => {
   try {
-    // Queries the Activity table, sorting newest entries directly to the top
     const activities = await prisma.activity.findMany({
       orderBy: { createdAt: 'desc' }
     });
@@ -26,6 +25,7 @@ export const getActivities = async (req: Request, res: Response) => {
 // 3. POST /api/system/activities - Write a brand new state mutation log entry
 export const createActivity = async (req: Request, res: Response) => {
   const { title } = req.body;
+  const activeUserId = req.user?.id; // Grabs active context identity safely from your parser layer
   
   if (!title) {
     res.status(400).json({ error: 'Title property is required' });
@@ -33,9 +33,11 @@ export const createActivity = async (req: Request, res: Response) => {
   }
 
   try {
-    // Inserts your dynamic string text straight into your local MariaDB database
     const newActivity = await prisma.activity.create({
-      data: { title }
+      data: { 
+        title,
+        userId: activeUserId // Automatically maps logs to active creator accounts if signed in
+      }
     });
     
     res.status(201).json(newActivity);
@@ -57,7 +59,6 @@ export const getWidgetControls = async (req: Request, res: Response) => {
 // 5. POST /api/system/widgets/seed - Emergency initializer to seed default cards text if empty
 export const seedWidgetControls = async (req: Request, res: Response) => {
   try {
-    // Upsert ensures we don't duplicate rows if they already exist
     await prisma.widgetControl.upsert({
       where: { controlKey: 'home-hub-card' },
       update: {},
@@ -88,7 +89,6 @@ export const seedWidgetControls = async (req: Request, res: Response) => {
 export const deleteActivity = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  // Strict structural type guard to ensure the ID is a valid, single string
   if (typeof id !== 'string') {
     res.status(400).json({ error: 'Invalid or missing unique identification parameter' });
     return;
@@ -96,20 +96,28 @@ export const deleteActivity = async (req: Request, res: Response) => {
 
   try {
     await prisma.activity.delete({
-      where: { id } // Now TypeScript is 100% confident this is a single string!
+      where: { id }
     });
-    // Return an HTTP 204 No Content status to confirm successful deletion
     res.status(204).end();
   } catch (error: any) {
     res.status(500).json({ error: 'Database delete operation failed', details: error.message });
   }
 };
 
-// 7. GET /api/system/users - Retrieve all registered profiles from MariaDB
+// 7. GET /api/system/users - Retrieve all registered profiles from MariaDB (Excludes sensitive hashes)
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        username: true,
+        displayName: true,
+        email: true,
+        role: true,
+        createdAt: true
+        // Explicit selection omitted the password string column to ensure security boundaries
+      }
     });
     res.status(200).json(users);
   } catch (error: any) {
@@ -119,7 +127,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
 // 8. POST /api/system/users - Provision a brand new user profile record
 export const createUser = async (req: Request, res: Response) => {
-  const { username, displayName, email, role } = req.body;
+  const { username, displayName, email, role, password } = req.body;
 
   if (!username || !displayName || !email) {
     res.status(400).json({ error: 'Missing required user creation field mappings' });
@@ -128,7 +136,21 @@ export const createUser = async (req: Request, res: Response) => {
 
   try {
     const newUser = await prisma.user.create({
-      data: { username, displayName, email, role }
+      data: { 
+        username: username.trim(), 
+        displayName: displayName.trim(), 
+        email: email.trim().toLowerCase(), 
+        role,
+        password: password ? password.trim() : '' // Binds a safe blank fallback string matching schema rules
+      },
+      select: {
+        id: true,
+        username: true,
+        displayName: true,
+        email: true,
+        role: true,
+        createdAt: true
+      }
     });
     res.status(201).json(newUser);
   } catch (error: any) {
@@ -139,7 +161,7 @@ export const createUser = async (req: Request, res: Response) => {
 // 9. PATCH /api/system/users/:id - Edit an existing profile or change clearance roles
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { displayName, email, role } = req.body;
+  const { displayName, email, role, password } = req.body;
 
   if (typeof id !== 'string') {
     res.status(400).json({ error: 'Missing valid user unique index identifier' });
@@ -149,7 +171,20 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: { displayName, email, role }
+      data: { 
+        ...(displayName && { displayName: displayName.trim() }),
+        ...(email && { email: email.trim().toLowerCase() }),
+        ...(role && { role }),
+        ...(password !== undefined && { password: password.trim() })
+      },
+      select: {
+        id: true,
+        username: true,
+        displayName: true,
+        email: true,
+        role: true,
+        createdAt: true
+      }
     });
     res.status(200).json(updatedUser);
   } catch (error: any) {
@@ -160,7 +195,7 @@ export const updateUser = async (req: Request, res: Response) => {
 // 10. DELETE /api/system/users/:id - Removes a specific user profile from MariaDB (Restricted to Admin)
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const currentUser = (req as any).user;
+  const currentUser = req.user;
 
   if (typeof id !== 'string') {
     res.status(400).json({ error: 'Missing valid user unique identifier' });
@@ -177,7 +212,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     await prisma.user.delete({
       where: { id }
     });
-    // Return an HTTP 204 No Content status to confirm successful erasure
     res.status(204).end();
   } catch (error: any) {
     res.status(500).json({ error: 'Database delete operation failed for user record', details: error.message });
