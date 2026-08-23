@@ -39,31 +39,75 @@ export default function UserForm({ editingUser, onSave, onCancel }: UserFormProp
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', padding: '1.5rem', border: '1px solid #eaeaea', borderRadius: '12px', marginBottom: '2rem' }}>
-      <h3 style={{ gridColumn: 'span 2', margin: '0 0 4px 0' }}>{editingUser ? 'Edit Profile Settings' : 'Register New User'}</h3>
+    <form onSubmit={handleSubmit} className="wolf-panel grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <h3 className="text-lg font-semibold tracking-tight sm:col-span-2">
+        {editingUser ? 'Edit Profile Settings' : 'Register New User'}
+      </h3>
+      
       <div>
-        <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Username:</label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={!!editingUser} required style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} />
+        <label className="block text-xs font-medium opacity-80 mb-1.5">Username:</label>
+        <input 
+          type="text" 
+          value={username} 
+          onChange={(e) => setUsername(e.target.value)} 
+          disabled={!!editingUser} 
+          required 
+          className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
+          style={{ borderColor: 'var(--color-wolf-border)' }}
+        />
       </div>
+      
       <div>
-        <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Display Name:</label>
-        <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} />
+        <label className="block text-xs font-medium opacity-80 mb-1.5">Display Name:</label>
+        <input 
+          type="text" 
+          value={displayName} 
+          onChange={(e) => setDisplayName(e.target.value)} 
+          required 
+          className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500"
+          style={{ borderColor: 'var(--color-wolf-border)' }}
+        />
       </div>
-      <div style={{ gridColumn: 'span 2' }}>
-        <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Email Address:</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} />
+      
+      <div className="sm:col-span-2">
+        <label className="block text-xs font-medium opacity-80 mb-1.5">Email Address:</label>
+        <input 
+          type="email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          required 
+          className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500"
+          style={{ borderColor: 'var(--color-wolf-border)' }}
+        />
       </div>
-      <div style={{ gridColumn: 'span 2' }}>
-        <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Clearance Level Role:</label>
-        <select value={role} onChange={(e: any) => setRole(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', background: '#fff', boxSizing: 'border-box' }}>
+      
+      <div className="sm:col-span-2">
+        <label className="block text-xs font-medium opacity-80 mb-1.5">Clearance Level Role:</label>
+        <select 
+          value={role} 
+          onChange={(e: any) => setRole(e.target.value)} 
+          className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-sky-500"
+          style={{ borderColor: 'var(--color-wolf-border)', backgroundColor: 'var(--color-wolf-card)', color: 'var(--color-wolf-text)' }}
+        >
           <option value="USER">USER</option>
           <option value="MANAGER">MANAGER</option>
           <option value="ADMIN">ADMIN</option>
         </select>
       </div>
-      <div style={{ gridColumn: 'span 2', marginTop: '8px' }}>
-        <button type="submit" style={{ width: '100%', padding: '10px', background: '#222', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Save Profile</button>
-        {editingUser && <button type="button" onClick={onCancel} style={{ width: '100%', padding: '8px', background: 'transparent', color: '#666', border: 'none', cursor: 'pointer', marginTop: '4px' }}>Cancel</button>}
+      
+      <div className="sm:col-span-2 mt-2 flex flex-col gap-2">
+        <button type="submit" className="wolf-btn-primary w-full text-sm font-semibold">
+          Save Profile
+        </button>
+        {editingUser && (
+          <button 
+            type="button" 
+            onClick={onCancel} 
+            className="w-full rounded-lg py-2 text-sm font-medium opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </form>
   );

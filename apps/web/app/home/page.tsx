@@ -12,94 +12,108 @@ export default function HomeHubDashboard() {
   // Check if the current context possesses management permissions
   const hasManagementClearance = userRole === 'ADMIN' || userRole === 'MANAGER';
 
+  // Map user role string securely to our theme utility badges
+  const getRoleBadgeClass = (role: string) => {
+    switch (role) {
+      case 'ADMIN': return 'role-badge-admin';
+      case 'MANAGER': return 'role-badge-manager';
+      case 'USER': return 'role-badge-user';
+      default: return 'role-badge-guest';
+    }
+  };
+
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
-      <div style={{ minHeight: '100vh', background: '#09090b', color: '#f4f4f5', fontFamily: 'system-ui, sans-serif', padding: '3rem 2rem' }}>
+      {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
+      <div className="flex w-full justify-center px-6 py-12">
+        
+        {/* Inner content box that maintains the strict left alignment format for your dashboard cards */}
+        <div className="w-full max-w-3xl text-left">
 
-        {/* Hub Control Header */}
-        <header style={{ maxWidth: '800px', margin: '0 auto 3rem auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #27272a', paddingBottom: '1.5rem' }}>
-          <div>
-            <h1 style={{ fontSize: '26px', fontWeight: '700', margin: '0 0 6px 0', letterSpacing: '-0.03em', color: '#f4f4f5' }}>
-              Modular Hub Zone
-            </h1>
-            <p style={{ color: '#71717a', fontSize: '14px', margin: 0 }}>
-              Ecosystem Control Dashboard — Welcome back, <span style={{ color: '#a1a1aa', fontWeight: '600' }}>{userProfile?.displayName || 'Guest'}</span>
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.05em', background: '#18181b', border: '1px solid #27272a', padding: '4px 8px', borderRadius: '4px', color: '#a1a1aa', textTransform: 'uppercase' }}>
-              Scope: {userRole}
-            </span>
-            {userRole !== 'GUEST' && (
-              <button
-                onClick={() => logoutUser()}
-                style={{ background: '#7f1d1d/20', border: '1px solid #7f1d1d', color: '#fca5a5', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s' }}
-              >
-                Sign Out
-              </button>
-            )}
-          </div>
-        </header>
-
-        {/* Modular Workspace Dashboard Grid */}
-        <main style={{ maxWidth: '800px', margin: '0 auto', display: 'grid', gridTemplateColumns: hasManagementClearance ? '1fr 1fr' : '1fr', gap: '1.5rem' }}>
-
-          {/* Summary Module Card 1: Conditionally Rendered for Management Personnel */}
-          {hasManagementClearance && (
-            <div style={{ padding: '1.5rem', background: '#18181b', border: '1px solid #27272a', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600', color: '#f4f4f5' }}>
-                  Security & Profiles
-                </h3>
-                <p style={{ margin: '0 0 1.5rem 0', fontSize: '13px', color: '#71717a', lineHeight: '1.5' }}>
-                  Manage full monorepo user records, modify authorization clearance structures, or simulate target test environment context configurations natively.
-                </p>
-              </div>
-              <Link href="/users" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#f4f4f5', color: '#09090b', textDecoration: 'none', borderRadius: '6px', fontWeight: '600', fontSize: '13px', transition: 'opacity 0.2s' }}>
-                Manage Directory →
-              </Link>
+          {/* Hub Control Header */}
+          <header className="mb-12 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: 'var(--color-wolf-border)' }}>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">
+                Modular Hub Zone
+              </h1>
+              <p className="text-sm opacity-70 mt-1">
+                Ecosystem Control Dashboard — Welcome back, <span className="font-semibold opacity-90">{userProfile?.displayName || 'Guest'}</span>
+              </p>
             </div>
-          )}
 
-          {/* Summary Module Card 2: Restricted Performance Metrics Panel */}
-          {hasManagementClearance && (
-            <div style={{ padding: '1.5rem', background: '#18181b', border: '1px solid #27272a', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: userRole === 'ADMIN' ? '#fca5a5' : '#71717a' }}>
+            <div className="flex items-center gap-3 self-start sm:self-auto">
+              <span className={`uppercase tracking-wider px-2.5 py-0.5 text-xs font-bold rounded-md ${getRoleBadgeClass(userRole)}`}>
+                Scope: {userRole}
+              </span>
+              {userRole !== 'GUEST' && (
+                <button
+                  onClick={() => logoutUser()}
+                  className="inline-flex items-center justify-center rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-500 transition-colors hover:bg-red-500/20 cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              )}
+            </div>
+          </header>
+
+          {/* Modular Workspace Dashboard Grid */}
+          <main className={`grid grid-cols-1 gap-6 ${hasManagementClearance ? 'sm:grid-cols-2' : 'grid-cols-1'}`}>
+
+            {/* Summary Module Card 1: Conditionally Rendered for Management Personnel */}
+            {hasManagementClearance && (
+              <div className="wolf-panel flex flex-col justify-between">
+                <div>
+                  <h3 className="text-base font-semibold tracking-tight mb-2">
+                    Security & Profiles
+                  </h3>
+                  <p className="mb-6 text-sm opacity-70 leading-relaxed">
+                    Manage full monorepo user records, modify authorization clearance structures, or simulate target test environment context configurations natively.
+                  </p>
+                </div>
+                <Link href="/users" className="wolf-btn-primary w-full text-sm">
+                  Manage Directory →
+                </Link>
+              </div>
+            )}
+
+            {/* Summary Module Card 2: Restricted Performance Metrics Panel */}
+            {hasManagementClearance && (
+              <div className="wolf-panel flex flex-col justify-between">
+                <div>
+                  <h3 className={`text-base font-semibold tracking-tight mb-2 ${userRole === 'ADMIN' ? 'text-red-500' : ''}`}>
                     Infrastructure Metrics 🔒
                   </h3>
+                  <p className="mb-6 text-sm opacity-70 leading-relaxed">
+                    Review live operational pipeline streams and critical system activity logs loop workspaces. Access requires absolute master administrator clearance.
+                  </p>
                 </div>
-                <p style={{ margin: '0 0 1.5rem 0', fontSize: '13px', color: '#71717a', lineHeight: '1.5' }}>
-                  Review live operational pipeline streams and critical system activity logs loop workspaces. Access requires absolute master administrator clearance.
+                <Link href="/dashboard" className="w-full inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium text-white text-sm transition-colors duration-200" style={{ backgroundColor: 'var(--color-brand-500)' }}>
+                  Open Core Logs →
+                </Link>
+              </div>
+            )}
+
+            {/* Fallback presentation viewport if account is basic USER or GUEST */}
+            {!hasManagementClearance && (
+              <div className="wolf-panel text-center py-12">
+                <p className="text-sm opacity-60">
+                  No active workspace modules are configured for this authorization layer. Additional universal content modules are currently under construction.
                 </p>
               </div>
-              <Link href="/dashboard" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#3b82f6', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: '600', fontSize: '13px' }}>
-                Open Core Logs →
-              </Link>
+            )}
 
-              {/*         {userRole === 'ADMIN' ? (
-              <Link href="/dashboard" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#3b82f6', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: '600', fontSize: '13px' }}>
-                Open Core Logs →
+          </main>
+
+          {/* Global Navigation Matrix Portal Footer Shortcut */}
+          {hasManagementClearance && (
+            <footer className="mt-16 text-center">
+              <Link href="/" className="text-sm opacity-60 hover:opacity-100 transition-opacity">
+                ← Return to Master Root Welcome Portal
               </Link>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '10px', background: '#27272a', color: '#52525b', borderRadius: '6px', fontWeight: '600', fontSize: '13px', border: '1px dashed #3f3f46' }}>
-                Clearance Locked
-              </div>
-            )}  */}
-            </div>
+            </footer>
           )}
 
-        </main>
-
-        {/* Global Navigation Matrix Portal Footer Shortcut */}
-        <footer style={{ maxWidth: '800px', margin: '4rem auto 0 auto', textAlign: 'center' }}>
-          <Link href="/" style={{ color: '#71717a', textDecoration: 'none', fontSize: '13px', transition: 'color 0.2s' }}>
-            ← Return to Master Root Welcome Portal
-          </Link>
-        </footer>
-
+        </div>
       </div>
     </PageGuard>
   );

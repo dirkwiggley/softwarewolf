@@ -1,81 +1,97 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import PageGuard from './PageGuard';
 
-interface WidgetControl {
-  controlKey: string;
-  heading: string;
-  bodyText: string;
-}
-
-export default function AdministrativeDashboardPage() {
-  const [widgets, setWidgets] = useState<WidgetControl[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Fetch layout rules dynamically through the Next.js proxy
-    fetch('/api/system/widgets')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to pull custom layouts');
-        return res.json();
-      })
-      .then((data: WidgetControl[]) => setWidgets(data))
-      .catch((err) => setError(err.message));
-  }, []);
-
-  // Helper function to find specific database card configurations safely
-  const getCardData = (key: string, defaultHeading: string, defaultBody: string) => {
-    const found = widgets.find(w => w.controlKey === key);
-    return {
-      heading: found ? found.heading : defaultHeading,
-      body: found ? found.bodyText : defaultBody
-    };
-  };
-
-  const homeCard = getCardData('home-hub-card', 'Home Hub', 'Loading...');
-  const metricsCard = getCardData('server-metrics-card', 'Server Metrics', 'Loading...');
-
+export default function RootIndexPortalPage() {
   return (
-    // Strictly locks this workspace view layout down to full Admin roles
-    <PageGuard allowedRoles={['ADMIN']}>
-      <div style={{ padding: '4rem 2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+    <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>
+      {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
+      <div className="flex w-full justify-center px-6 py-16">
         
-        <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
-          <Link href="/" style={{ color: '#0070f3', textDecoration: 'none', fontSize: '14px' }}>← Back to Root Index</Link>
-        </div>
-
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Infrastructure Control</h1>
-        <p style={{ color: '#666', marginBottom: '3rem' }}>Welcome to your centralized full-stack ecosystem administration screen.</p>
-        
-        {error && <p style={{ color: 'red' }}>Layout Sync Error: {error}</p>}
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', textAlign: 'left' }}>
+        {/* Inner content box that maintains the strict left alignment format for your grid matrix */}
+        <div className="w-full max-w-4xl text-left">
           
-          {/* Module Card 1: Text loaded from MariaDB row 'home-hub-card' */}
-          <div style={{ padding: '1.5rem', border: '1px solid #eaeaea', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.01)', background: '#fff' }}>
-            <h3 style={{ marginTop: 0, marginBottom: '8px' }}>{homeCard.heading}</h3>
-            <p style={{ margin: '0 0 1.5rem 0', fontSize: '14px', color: '#666', lineHeight: '1.4' }}>
-              {homeCard.body}
+          {/* Header Branding Panel */}
+          <header className="mb-12 border-b pb-8" style={{ borderColor: 'var(--color-wolf-border)' }}>
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+              SoftwareWolf Ecosystem
+            </h1>
+            <p className="mt-3 text-base opacity-70">
+              Welcome to your centralized full-stack application command center and environment matrices.
             </p>
-            <Link href="/home" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#222', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: '500', fontSize: '14px' }}>
-              Enter Hub →
-            </Link>
-          </div>
+          </header>
 
-          {/* Module Card 2: Text loaded from MariaDB row 'server-metrics-card' */}
-          <div style={{ padding: '1.5rem', border: '1px solid #eaeaea', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.01)', background: '#fff' }}>
-            <h3 style={{ marginTop: 0, marginBottom: '8px' }}>{metricsCard.heading}</h3>
-            <p style={{ margin: '0 0 1.5rem 0', fontSize: '14px', color: '#666', lineHeight: '1.4' }}>
-              {metricsCard.body}
-            </p>
-            <div style={{ textAlign: 'center', padding: '10px', background: '#e6f4ea', color: '#137333', borderRadius: '6px', fontWeight: '600', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              ✓ Pipeline Active
-            </div>
-          </div>
+          {/* Dynamic Section Matrix Layout */}
+          <main className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            
+            {/* Main User Workspace Module */}
+            <section className="wolf-panel flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex items-center">
+                  <span className="role-badge-user">Workspace</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight mb-2">Home Dashboard</h2>
+                <p className="text-sm opacity-70 mb-6 leading-relaxed">
+                  Access your personalized operational environment modules, workflows, and account settings.
+                </p>
+              </div>
+              <Link href="/home" className="wolf-btn-primary w-full text-sm">
+                Launch Dashboard →
+              </Link>
+            </section>
 
+            {/* User Management Panel */}
+            <section className="wolf-panel flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex items-center">
+                  <span className="role-badge-manager">Management</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight mb-2">Identity Directory</h2>
+                <p className="text-sm opacity-70 mb-6 leading-relaxed">
+                  Administer user profiles, toggle permission vectors, and handle database identity credentials.
+                </p>
+              </div>
+              <Link href="/users" className="wolf-btn-primary w-full text-sm">
+                Open Directory →
+              </Link>
+            </section>
+
+            {/* Infrastructure Control Panel (Locked exclusively to Admin) */}
+            <section className="wolf-panel flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex items-center">
+                  <span className="role-badge-admin">Infrastructure</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight mb-2">Control Room</h2>
+                <p className="text-sm opacity-70 mb-6 leading-relaxed">
+                  Monitor system metrics, review MariaDB logs, and synchronize structural layout parameters.
+                </p>
+              </div>
+              <Link href="/dashboard" className="wolf-btn-primary w-full text-sm">
+                Enter Control Room →
+              </Link>
+            </section>
+
+            {/* Future General Content Shell Placeholder */}
+            <section className="wolf-panel flex flex-col justify-between border-dashed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+              <div>
+                <div className="mb-4 inline-flex items-center">
+                  <span className="role-badge-guest">Public Access</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight mb-2">Knowledge Base</h2>
+                <p className="text-sm opacity-60 mb-6 leading-relaxed">
+                  Universal content library, release notes, and ecosystem technical documentation. Coming soon.
+                </p>
+              </div>
+              <div className="w-full text-center py-2 text-xs font-semibold uppercase tracking-wider opacity-40">
+                Under Construction
+              </div>
+            </section>
+
+          </main>
         </div>
+
       </div>
     </PageGuard>
   );

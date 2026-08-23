@@ -1,107 +1,91 @@
 'use client';
 
-import { useEffect, useState, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import PageGuard from '../PageGuard'; // <-- Import our frontend gatekeeper
-import type { HealthResponse, ActivityItem } from '@repo/types';
+import PageGuard from '../PageGuard'; // Adjusted relative import path for dashboard folder depth
 
-export default function DashboardPage() {
-  const [health, setHealth] = useState<HealthResponse | null>(null);
-  const [items, setItems] = useState<ActivityItem[]>([]);
-  const [inputTitle, setInputTitle] = useState('');
+interface WidgetControl {
+  controlKey: string;
+  heading: string;
+  bodyText: string;
+}
+
+export default function AdministrativeDashboardPage() {
+  const [widgets, setWidgets] = useState<WidgetControl[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/system/health').then(res => res.json()),
-      fetch('/api/system/activities').then(res => res.json())
-    ])
-      .then(([healthData, listItems]: [HealthResponse, ActivityItem[]]) => {
-        setHealth(healthData);
-        setItems(listItems);
+    // Fetch layout rules dynamically through the Next.js proxy
+    fetch('/api/system/widgets')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to pull custom layouts');
+        return res.json();
       })
+      .then((data: WidgetControl[]) => setWidgets(data))
       .catch((err) => setError(err.message));
   }, []);
 
-  const handleAddItem = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!inputTitle.trim()) return;
-
-    try {
-      const res = await fetch('/api/system/activities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: inputTitle })
-      });
-
-      if (!res.ok) throw new Error('Failed to push state item upstream');
-      const addedItem: ActivityItem = await res.json();
-      
-      setItems((prev) => [addedItem, ...prev]);
-      setInputTitle('');
-    } catch (err: any) {
-      setError(err.message);
-    }
+  // Helper function to find specific database card configurations safely
+  const getCardData = (key: string, defaultHeading: string, defaultBody: string) => {
+    const found = widgets.find(w => w.controlKey === key);
+    return {
+      heading: found ? found.heading : defaultHeading,
+      body: found ? found.bodyText : defaultBody
+    };
   };
 
-  const handleDeleteItem = async (id: string) => {
-    try {
-      const res = await fetch(`/api/system/activities/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to delete item from database');
-      setItems((prev) => prev.filter((item) => item.id !== id));
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  const homeCard = getCardData('home-hub-card', 'Home Hub', 'Loading...');
+  const metricsCard = getCardData('server-metrics-card', 'Server Metrics', 'Loading...');
 
   return (
-    // Guard this entire page view: Only let ADMIN or MANAGER tiers step inside!
-    <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>
-      <div style={{ padding: '3rem', fontFamily: 'system-ui, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+    // Strictly locks this workspace view layout down to full Admin roles
+    <PageGuard allowedRoles={['ADMIN']}>
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         
-        <div style={{ marginBottom: '1.5rem' }}>
-          <Link href="/" style={{ color: '#0070f3', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>
-            ← Back to Home
+        <div className="mb-6 text-left">
+          <Link href="/" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+            ← Back to Root Index
           </Link>
         </div>
 
-        <h1>Softwarewolf Dashboard Loop</h1>
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        <h1 className="mb-2 text-4xl font-bold tracking-tight">Infrastructure Control</h1>
+        <p className="mb-12 text-sm opacity-70">Welcome to your centralized full-stack ecosystem administration screen.</p>
+        
+        {error && (
+          <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
+            Layout Sync Error: {error}
+          </div>
+        )}
 
-        <div style={{ padding: '1rem', border: '1px solid #eee', borderRadius: '8px', marginBottom: '1.5rem' }}>
-          Status: <strong style={{ color: 'green' }}>{health?.status || 'Connecting...'}</strong>
-          <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#666' }}>{health?.message}</p>
+        <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-2">
+          
+          {/* Module Card 1: Text loaded from MariaDB row 'home-hub-card' */}
+          <div className="wolf-panel flex flex-col justify-between">
+            <div>
+              <h3 className="text-lg font-semibold tracking-tight mb-2">{homeCard.heading}</h3>
+              <p className="mb-6 text-sm opacity-70 leading-relaxed">
+                {homeCard.body}
+              </p>
+            </div>
+            <Link href="/home" className="wolf-btn-primary w-full text-sm">
+              Enter Hub →
+            </Link>
+          </div>
+
+          {/* Module Card 2: Text loaded from MariaDB row 'server-metrics-card' */}
+          <div className="wolf-panel flex flex-col justify-between">
+            <div>
+              <h3 className="text-lg font-semibold tracking-tight mb-2">{metricsCard.heading}</h3>
+              <p className="mb-6 text-sm opacity-70 leading-relaxed">
+                {metricsCard.body}
+              </p>
+            </div>
+            <div className="role-badge-user text-center uppercase tracking-wider py-2 rounded-lg text-xs font-bold">
+              ✓ Pipeline Active
+            </div>
+          </div>
+
         </div>
-
-        <form onSubmit={handleAddItem} style={{ display: 'flex', gap: '8px', marginBottom: '2rem' }}>
-          <input
-            type="text"
-            value={inputTitle}
-            onChange={(e) => setInputTitle(e.target.value)}
-            placeholder="Log a system event..."
-            style={{ flex: 1, padding: '10px', border: '1px solid #ccc', borderRadius: '6px', fontSize: '15px' }}
-          />
-          <button type="submit" style={{ padding: '10px 16px', background: '#0070f3', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
-            Submit State
-          </button>
-        </form>
-
-        <h3>Live Activity Stream logs:</h3>
-        <ul style={{ padding: 0, listStyle: 'none' }}>
-          {items.map((item) => (
-            <li key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
-              <div>
-                <span>{item.title}</span> — <small style={{ color: '#888' }}>{new Date(item.createdAt).toLocaleTimeString()}</small>
-              </div>
-              <button 
-                onClick={() => handleDeleteItem(item.id)}
-                style={{ background: 'transparent', color: '#ff3333', border: '1px solid #ffcccc', borderRadius: '4px', padding: '4px 8px', fontSize: '12px', cursor: 'pointer', fontWeight: '500' }}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
       </div>
     </PageGuard>
   );

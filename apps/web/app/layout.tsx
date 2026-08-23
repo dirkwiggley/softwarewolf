@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SecurityProvider } from './SecurityContext';
+import './globals.scss'; // Connects the Tailwind v4 compilation engine globally
 
 export const metadata: Metadata = {
   title: "Softwarewolf Home Ecosystem",
@@ -13,8 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, background: '#fafafa', color: '#111' }}>
-        {/* Inject the provider so all pages share the same login context state */}
+      {/* The body styling and dark/light shifts are now handled perfectly inside globals.scss */}
+      <body>
         <SecurityProvider>
           {children}
         </SecurityProvider>

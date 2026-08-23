@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  /* Default Light Theme Values */
+  --color-brand-50: #f0f7ff;
+  --color-brand-500: #0284c7;
+  --color-brand-900: #0c4a6e;
+  
+  --color-wolf-bg: #f8fafc;          /* Slate 50 */
+  --color-wolf-card: #ffffff;        /* Pure White */
+  --color-wolf-border: #e2e8f0;      /* Slate 200 */
+  --color-wolf-text: #0f172a;        /* Slate 900 */
+
+  /* Light Theme Role-Based Semantic Values */
+  --color-role-admin: #dc2626;       /* Red 600 */
+  --color-role-manager: #d97706;     /* Amber 600 */
+  --color-role-user: #059669;        /* Emerald 600 */
+  --color-role-guest: #475569;       /* Slate 600 */
+}
+
+/* Correct Tailwind v4 Dark Variant Selector Mapping */
+@variant dark (.dark &);
+
+@theme {
+  --color-wolf-bg: #0f172a;          /* Slate 900 */
+  --color-wolf-card: #1e293b;        /* Slate 800 */
+  --color-wolf-border: #334155;      /* Slate 700 */
+  --color-wolf-text: #f8fafc;        /* Slate 50 */
+
+  /* Dark Theme Role-Based Semantic Values */
+  --color-role-admin: #f87171;       /* Red 400 */
+  --color-role-manager: #fbbf24;     /* Amber 400 */
+  --color-role-user: #34d399;        /* Emerald 400 */
+  --color-role-guest: #94a3b8;       /* Slate 400 */
+}
+
+
+/* Extracted Responsive Design Utilities */
+@utility wolf-panel {
+  @apply rounded-xl border p-6 shadow-xs transition-colors duration-200;
+  background-color: var(--color-wolf-card);
+  border-color: var(--color-wolf-border);
+  color: var(--color-wolf-text);
+}
+
+@utility wolf-btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium text-white transition-colors duration-200 disabled:opacity-50;
+  background-color: var(--color-brand-500);
+  &:hover { background-color: var(--color-brand-900); }
+}
+
+/* Dynamic Multi-theme Badge Utilities */
+@utility role-badge-admin {
+  @apply border rounded-full px-2 py-0.5 text-xs font-semibold bg-red-500/10;
+  border-color: calc(var(--color-role-admin) + 20%);
+  color: var(--color-role-admin);
+}
+@utility role-badge-manager {
+  @apply border rounded-full px-2 py-0.5 text-xs font-semibold bg-amber-500/10;
+  border-color: calc(var(--color-role-manager) + 20%);
+  color: var(--color-role-manager);
+}
+@utility role-badge-user {
+  @apply border rounded-full px-2 py-0.5 text-xs font-semibold bg-emerald-500/10;
+  border-color: calc(var(--color-role-user) + 20%);
+  color: var(--color-role-user);
+}
+@utility role-badge-guest {
+  @apply border rounded-full px-2 py-0.5 text-xs font-semibold bg-slate-500/10;
+  border-color: calc(var(--color-role-guest) + 20%);
+  color: var(--color-role-guest);
+}

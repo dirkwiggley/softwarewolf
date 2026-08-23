@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { useSecurity } from '../../SecurityContext';
 
-// Hardcoded array of common development usernames matching standard roles
+// Standard development usernames matching our defined theme tokens
 const DEV_TEST_PROFILES = [
-  { username: 'admin', label: 'Quick Login: ADMIN', color: 'bg-red-600 hover:bg-red-500' },
-  { username: 'manager', label: 'Quick Login: MANAGER', color: 'bg-amber-600 hover:bg-amber-500' },
-  { username: 'user', label: 'Quick Login: USER', color: 'bg-blue-600 hover:bg-blue-500' },
+  { username: 'admin', label: 'Quick Login: ADMIN', badgeClass: 'role-badge-admin' },
+  { username: 'manager', label: 'Quick Login: MANAGER', badgeClass: 'role-badge-manager' },
+  { username: 'user', label: 'Quick Login: USER', badgeClass: 'role-badge-user' },
 ];
 
 export default function ContextSwitcher() {
@@ -24,7 +24,6 @@ export default function ContextSwitcher() {
       if (!success) {
         setError(`Failed simulation mapping: Ensure user '${username}' exists in MariaDB.`);
       }
-      // Note: loginUser naturally triggers router actions or forces state rehydration
     } catch (err) {
       setError('Network communication failure during simulation swap.');
     } finally {
@@ -36,13 +35,16 @@ export default function ContextSwitcher() {
   if (process.env.NODE_ENV === 'production') return null;
 
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-4 shadow-md backdrop-blur-sm">
-      <div className="flex items-center justify-between">
+    <div 
+      className="rounded-xl border p-4 shadow-sm transition-colors duration-200"
+      style={{ backgroundColor: 'var(--color-wolf-card)', borderColor: 'var(--color-wolf-border)' }}
+    >
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Local Development Sandbox</h3>
-          <p className="mt-0.5 text-xs text-zinc-500">
-            Current Identity Context Profile Clearance:
-            <span className="ml-1 font-mono font-bold text-zinc-200 uppercase">
+          <h3 className="text-xs font-semibold uppercase tracking-wider opacity-60">Local Development Sandbox</h3>
+          <p className="mt-1 text-xs opacity-70">
+            Current Identity Context Profile Clearance:{' '}
+            <span className="font-mono font-bold uppercase" style={{ color: 'var(--color-brand-500)' }}>
               {userProfile?.role || 'UNKNOWN'}
             </span>
           </p>
@@ -51,7 +53,8 @@ export default function ContextSwitcher() {
         {userProfile && userProfile.role !== 'GUEST' && (
           <button
             onClick={() => logoutUser()}
-            className="rounded bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-300 transition hover:bg-zinc-700"
+            className="rounded-lg border px-3 py-1.5 text-xs font-medium transition-opacity hover:opacity-80 cursor-pointer"
+            style={{ borderColor: 'var(--color-wolf-border)', color: 'var(--color-wolf-text)' }}
           >
             Clear Cookies (Guest Mode)
           </button>
@@ -59,7 +62,7 @@ export default function ContextSwitcher() {
       </div>
 
       {error && (
-        <div className="mt-3 rounded border border-red-900/50 bg-red-950/20 p-2 text-xs font-medium text-red-400">
+        <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-xs font-medium text-red-500">
           {error}
         </div>
       )}
@@ -70,7 +73,7 @@ export default function ContextSwitcher() {
             key={profile.username}
             onClick={() => handleQuickSwitch(profile.username)}
             disabled={switching}
-            className={`rounded px-3 py-1.5 text-xs font-medium text-white shadow-sm transition disabled:opacity-50 ${profile.color}`}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide border shadow-2xs transition-opacity hover:opacity-80 disabled:opacity-40 cursor-pointer ${profile.badgeClass}`}
           >
             {switching ? 'Swapping Matrix...' : profile.label}
           </button>

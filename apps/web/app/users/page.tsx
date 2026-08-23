@@ -72,35 +72,78 @@ export default function UserManagementPage() {
     } catch (err: any) { setError(err.message); }
   };
 
+  // Helper utility to pair incoming role states to our shared theme badge tokens
+  const getBadgeClass = (role: string) => {
+    if (role === 'ADMIN') return 'role-badge-admin';
+    if (role === 'MANAGER') return 'role-badge-manager';
+    return 'role-badge-user';
+  };
+
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>
-      <div style={{ padding: '3rem', fontFamily: 'system-ui, sans-serif', maxWidth: '700px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '1rem' }}>
-          <Link href="/home" style={{ color: '#0070f3', textDecoration: 'none', fontSize: '14px' }}>← Back to Home Hub</Link>
-        </div>
+      {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
+      <div className="flex w-full justify-center px-6 py-12">
+        
+        {/* Inner content box that maintains the strict left alignment format for your directory details */}
+        <div className="w-full max-w-2xl text-left">
+          
+          <div className="mb-6">
+            <Link href="/home" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+              ← Back to Home Hub
+            </Link>
+          </div>
 
-        <h1>Security & Profile Directory</h1>
-        <ContextSwitcher />
-        {error && <p style={{ color: 'red', background: '#fff5f5', padding: '10px', borderRadius: '4px', border: '1px solid #ffcccc' }}>Error: {error}</p>}
-        <UserForm editingUser={editingUser} onSave={handleSave} onCancel={() => setEditingUser(null)} />
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Security & Profile Directory</h1>
+          
+          <div className="mb-6">
+            <ContextSwitcher />
+          </div>
 
-        <h3>Registered Users ({users.length})</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {users.map((user) => (
-            <div key={user.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', border: '1px solid #eee', borderRadius: '8px', background: '#fff' }}>
-              <div>
-                <strong>{user.displayName}</strong> <span style={{ fontSize: '12px', color: '#666' }}>(@{user.username})</span>
-                <div style={{ fontSize: '13px', color: '#444', marginTop: '2px' }}>{user.email}</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <span style={{ display: 'inline-block', padding: '3px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', background: user.role === 'ADMIN' ? '#ffe6e6' : '#eee', color: user.role === 'ADMIN' ? '#cc0000' : '#333' }}>{user.role}</span>
-                <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
-                  <button onClick={() => setEditingUser(user)} style={{ fontSize: '12px', color: '#0070f3', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Edit</button>
-                  <button onClick={() => handleDelete(user.id)} style={{ fontSize: '12px', color: '#ff3333', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Remove</button>
+          {error && (
+            <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
+              Error: {error}
+            </div>
+          )}
+
+          <div className="mb-8">
+            <UserForm editingUser={editingUser} onSave={handleSave} onCancel={() => setEditingUser(null)} />
+          </div>
+
+          <h3 className="text-lg font-semibold tracking-tight mb-4">Registered Users ({users.length})</h3>
+          
+          <div className="flex flex-col gap-4">
+            {users.map((user) => (
+              <div key={user.id} className="wolf-panel flex items-center justify-between p-4">
+                <div>
+                  <strong className="text-base font-semibold">{user.displayName}</strong>{' '}
+                  <span className="text-xs opacity-60">(@{user.username})</span>
+                  <div className="text-sm opacity-70 mt-1">{user.email}</div>
+                </div>
+                
+                <div className="text-right">
+                  <span className={`uppercase tracking-wider px-2 py-0.5 text-xs font-bold rounded ${getBadgeClass(user.role)}`}>
+                    {user.role}
+                  </span>
+                  <div className="mt-3 flex gap-4 justify-end text-sm">
+                    <button 
+                      onClick={() => setEditingUser(user)} 
+                      className="font-medium transition-colors hover:opacity-70 cursor-pointer"
+                      style={{ color: 'var(--color-brand-500)' }}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(user.id)} 
+                      className="font-medium text-red-500 transition-colors hover:text-red-600 cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
         </div>
       </div>
     </PageGuard>
