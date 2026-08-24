@@ -45,14 +45,6 @@ export default function HomeHubDashboard() {
               <span className={`uppercase tracking-wider px-2.5 py-0.5 text-xs font-bold rounded-md ${getRoleBadgeClass(userRole)}`}>
                 Scope: {userRole}
               </span>
-              {userRole !== 'GUEST' && (
-                <button
-                  onClick={() => logoutUser()}
-                  className="inline-flex items-center justify-center rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-500 transition-colors hover:bg-red-500/20 cursor-pointer"
-                >
-                  Sign Out
-                </button>
-              )}
             </div>
           </header>
 

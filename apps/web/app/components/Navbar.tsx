@@ -1,16 +1,15 @@
 'use client';
 
-/* 1a. Import useState alongside React */
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSecurity } from '../SecurityContext';
 
 export default function Navbar() {
-  const { userProfile, theme, toggleTheme } = useSecurity();
+  /* Extract the logoutUser method from your security context hook */
+  const { userProfile, theme, toggleTheme, logoutUser } = useSecurity();
   const pathname = usePathname();
   
-  /* 1b. Initialize local menu toggle visibility state */
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const userRole = userProfile?.role || 'GUEST';
@@ -47,7 +46,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right Section: Interactive Theme Controls & Mobile Trigger */}
+        {/* Right Section: Interactive Controls */}
         <div className="flex items-center gap-4">
           <button
             onClick={toggleTheme}
@@ -58,7 +57,29 @@ export default function Navbar() {
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
 
-          {/* 1c. Wire click handler to toggle state boolean */}
+          {/* Desktop Logout Trigger: Only displays for authenticated accounts */}
+          {userRole !== 'GUEST' ? (
+            <button
+              onClick={logoutUser}
+              type="button"
+              className="hidden px-3 py-1.5 text-xs font-semibold rounded-lg border transition-opacity hover:opacity-80 sm:inline-flex cursor-pointer text-red-500 bg-red-500/5"
+              style={{ borderColor: 'rgba(239, 68, 68, 0.2)' }}
+            >
+              Sign Out
+            </button>
+          ) : (
+            /* 1a. Desktop Guest Gateway Trigger: Only displays when on an unauthenticated path, hiding on /login itself */
+            !isLoginPage && (
+              <Link
+                href="/login"
+                className="hidden px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors hover:opacity-80 sm:inline-flex cursor-pointer text-sky-500 bg-sky-500/5"
+                style={{ borderColor: 'rgba(2, 132, 199, 0.2)' }}
+              >
+                Sign In
+              </Link>
+            )
+          )}
+
           <button
             type="button"
             aria-label="Open mobile workspace menu"
@@ -72,7 +93,7 @@ export default function Navbar() {
 
       </div>
 
-      {/* 1d. Conditional Mobile Dropdown Link Stack (Hidden on desktop via sm:hidden) */}
+      {/* Conditional Mobile Dropdown Link Stack */}
       {isMobileMenuOpen && (
         <div className="mt-4 flex flex-col gap-3 pt-4 border-t text-sm font-medium opacity-90 sm:hidden" style={{ borderColor: 'var(--color-wolf-border)' }}>
           <Link href="/home" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Dashboard</Link>
@@ -84,6 +105,30 @@ export default function Navbar() {
           )}
           {userRole === 'ADMIN' && (
             <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Infrastructure</Link>
+          )}
+          
+          {/* 1b. Mobile Dropdown Conditional Gateway Trigger */}
+          {userRole !== 'GUEST' ? (
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                logoutUser();
+              }}
+              type="button"
+              className="w-full text-left px-2 py-1.5 rounded-lg font-semibold text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+            >
+              Sign Out
+            </button>
+          ) : (
+            !isLoginPage && (
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full text-left px-2 py-1.5 rounded-lg font-semibold text-sky-500 hover:bg-sky-500/10 transition-colors cursor-pointer"
+              >
+                Sign In
+              </Link>
+            )
           )}
         </div>
       )}
