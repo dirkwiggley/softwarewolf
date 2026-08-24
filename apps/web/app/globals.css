@@ -1,0 +1,56 @@
+@import "tailwindcss";
+@import "@softwarewolf/ui";
+@source "./**/*.{ts,tsx}";
+
+/* Tailwind Base Layer: Lowest priority cascade layer for global resets */
+@layer base {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply min-h-screen antialiased transition-colors duration-200;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--color-wolf-bg);
+    color: var(--color-wolf-text);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* Theme-Responsive Image Handling */
+.imgDark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  .imgLight {
+    display: none;
+  }
+  .imgDark {
+    display: unset;
+  }
+}
+
+/* Native Global CSS Class — Now sits safely above the base reset layer */
+.wolf-panel {
+  @apply rounded-xl border shadow-xs transition-colors duration-200;
+  padding: 40px; 
+  background-color: var(--color-wolf-card);
+  border-color: var(--color-wolf-border);
+  color: var(--color-wolf-text);
+}

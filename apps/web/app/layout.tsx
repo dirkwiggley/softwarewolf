@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SecurityProvider } from './SecurityContext';
-import './globals.scss'; // Connects the Tailwind v4 compilation engine globally
+import Navbar from './components/Navbar'; // Import the new global header
+import './globals.css';
 
 export const metadata: Metadata = {
   title: "Softwarewolf Home Ecosystem",
@@ -14,9 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* The body styling and dark/light shifts are now handled perfectly inside globals.scss */}
       <body>
         <SecurityProvider>
+          <Navbar />
           {children}
         </SecurityProvider>
       </body>

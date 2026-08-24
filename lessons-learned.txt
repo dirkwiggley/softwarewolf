@@ -1,0 +1,30 @@
+Whenever you want to add or modify rules inside your globals.css file moving forward,
+  keep these three key principles in mind to prevent styles from breaking or striking 
+  each other out:
+1. The Rule of Isolation for Global Selectors (*, html, body)
+  The Rule: Never write loose global element selectors (like *, div, p, or input) 
+    directly in the file root.
+  Why: Raw global element selectors have blanket authority in standard CSS. They will instantly 
+    override Tailwind's internal compiled layout utilities.
+  What to do: If you must reset general element behaviors, always wrap them inside a native layer
+    or use Tailwind's native @utility macro block to keep them safely partitioned at the lowest 
+    baseline priority layer.
+2. The Tailwind v4 Top-to-Bottom Processing Order
+  Tailwind v4 compiles styles based on a strict cascading layout order from the top of your file
+    to the bottom:
+  1. Directives & Configurations: @import "tailwindcss"; and @source paths must stay at the absolute 
+    top to initialize the engine.
+  2. Base Rules / Layer Overrides: General CSS reset blocks.
+  3. Custom Components & Utilities: Explicit class rules (like .wolf-panel) must stay at the 
+    absolute bottom of the file. This ensures they load last and can naturally cascade over any 
+    global resets written above them.
+3. Choose the Right Selector Strategy
+  When adding your own styles to globals.css, choose your syntax based on how you want the class to
+    behave:
+    Use .your-class-name (Standard CSS Block): Use this for structured components (like cards, layout
+      grids, or complex forms) where you are mixing standard properties (padding: 40px;) with a Tailwind
+      @apply string. This forces the browser to evaluate it as an absolute rule down the cascade.
+    Use @utility your-utility-name (Tailwind v4 Macro): Use this if you are creating a quick utility 
+      shortcut that relies entirely on Tailwind @apply classes 
+      (e.g., @utility btn-blue { @apply bg-blue-500 text-white rounded; }). 
+      This registers it natively within Tailwind's internal compilation layers.

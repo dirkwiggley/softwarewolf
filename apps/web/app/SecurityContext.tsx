@@ -15,8 +15,10 @@ interface SecurityContextType {
   activeUserId: string | null;
   userProfile: UserSessionProfile | null;
   loading: boolean;
+  theme: 'light' | 'dark';
   loginUser: (username: string) => Promise<boolean>;
   logoutUser: () => Promise<void>;
+  toggleTheme: () => void;
 }
 
 const SecurityContext = createContext<SecurityContextType | undefined>(undefined);
@@ -25,8 +27,31 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserSessionProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  
   const router = useRouter();
   const pathname = usePathname();
+
+  // Synchronize localStorage preference and initialize theme matching on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('wolf_theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    }
+  }, []);
+
+  // Watch theme changes and apply class to documentElement for Tailwind v4
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('wolf_theme', theme);
+  }, [theme]);
 
   // Background identity check on component initialization
   useEffect(() => {
@@ -105,8 +130,12 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
     }
   };
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   return (
-    <SecurityContext.Provider value={{ activeUserId, userProfile, loading, loginUser, logoutUser }}>
+    <SecurityContext.Provider value={{ activeUserId, userProfile, loading, theme, loginUser, logoutUser, toggleTheme }}>
       {children}
     </SecurityContext.Provider>
   );

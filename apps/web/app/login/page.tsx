@@ -15,7 +15,7 @@ export default function CompleteLoginPage() {
   // Redirect users instantly if a background handshake shows they are already signed in
   useEffect(() => {
     if (!loading && userProfile && userProfile.role !== 'GUEST') {
-      router.push('/home'); // Correct: Sends user to the brand-new dashboard workspace hub
+      router.push('/home'); // Sends user to the dashboard workspace hub
     }
   }, [userProfile, loading, router]);
 
@@ -27,7 +27,7 @@ export default function CompleteLoginPage() {
     try {
       const success = await loginUser(username.trim());
       if (success) {
-        router.push('/home'); // Correct: Forwards newly authenticated entries to the true zone center
+        router.push('/home'); // Forwards newly authenticated entries to the true zone center
       } else {
         setError('Authentication Failed: Identity username could not be verified.');
       }
@@ -40,37 +40,37 @@ export default function CompleteLoginPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#09090b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a1a1aa', fontFamily: 'system-ui, sans-serif', fontSize: '13px' }}>
+      <div className="flex min-h-screen w-full items-center justify-center p-4 text-xs font-medium opacity-60">
         Verifying security parameters...
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#09090b', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui, sans-serif', padding: '1rem' }}>
-      <div style={{ width: '100%', maxWidth: '380px', background: '#18181b', border: '1px solid #27272a', borderRadius: '12px', padding: '2rem', boxSizing: 'border-box', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
-
+    <div className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
+      {/* Login Card Panel — Padding expanded to add extra inner breathing room */}
+      <div className="wolf-panel w-full max-w-sm shadow-md">
         {/* Header Branding Panel */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h1 style={{ color: '#f4f4f5', fontSize: '20px', fontWeight: '600', margin: '0 0 6px 0', letterSpacing: '-0.025em' }}>
+        <div className="mb-6">
+          <h1 className="text-xl font-bold tracking-tight mb-1">
             SoftwareWolf Home
           </h1>
-          <p style={{ color: '#71717a', fontSize: '13px', margin: 0, lineHeight: '1.4' }}>
+          <p className="text-sm opacity-70 leading-relaxed">
             Input your registered core account identity to gain infrastructure gateway clearance.
           </p>
         </div>
 
         {/* Error Alert Display */}
         {error && (
-          <div style={{ background: 'rgba(127, 29, 29, 0.2)', border: '1px solid #7f1d1d', borderRadius: '6px', padding: '10px 12px', color: '#fca5a5', fontSize: '13px', marginBottom: '1.25rem', lineHeight: '1.4' }}>
+          <div className="mb-5 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500 leading-relaxed">
             ⚠️ {error}
           </div>
         )}
 
         {/* Credentials Form Structure */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label style={{ display: 'block', color: '#a1a1aa', fontSize: '12px', fontWeight: '500', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
               Identity Username
             </label>
             <input
@@ -80,18 +80,20 @@ export default function CompleteLoginPage() {
               disabled={submitting}
               placeholder="e.g. admin"
               required
-              style={{ width: '100%', padding: '10px 12px', background: '#09090b', border: '1px solid #27272a', borderRadius: '6px', color: '#f4f4f5', fontSize: '14px', boxSizing: 'border-box', outline: 'none', transition: 'border-color 0.2s' }}
+              className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
+              style={{ borderColor: 'var(--color-wolf-border)' }}
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            style={{ width: '100%', padding: '11px', background: '#f4f4f5', color: '#09090b', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: '600', cursor: submitting ? 'not-allowed' : 'pointer', transition: 'background 0.2s', marginTop: '0.5rem', opacity: submitting ? 0.7 : 1 }}
+            className="wolf-btn-primary w-full text-sm font-semibold py-2.5 mt-2"
           >
             {submitting ? 'Verifying Gateway...' : 'Request Clearance'}
           </button>
         </form>
+
         <button
           type="button"
           onClick={() => {
@@ -99,14 +101,15 @@ export default function CompleteLoginPage() {
             sessionStorage.setItem('wolf_guest_allowed', 'true');
             router.push('/home');
           }}
-          style={{ width: '100%', padding: '11px', background: 'transparent', color: '#a1a1aa', border: '1px solid #27272a', borderRadius: '6px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s', marginTop: '0.5rem' }}
+          className="w-full rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80 mt-2 cursor-pointer"
+          style={{ borderColor: 'var(--color-wolf-border)', color: 'var(--color-wolf-text)' }}
         >
           Continue as Guest
         </button>
       </div>
 
       {/* Anonymous Guest Fallback Notice */}
-      <p style={{ color: '#3f3f46', fontSize: '12px', marginTop: '1.5rem', marginInline: 'auto' }}>
+      <p className="text-xs opacity-40 mt-6 text-center">
         Unregistered connections will continue with localized guest permissions.
       </p>
     </div>
