@@ -19,6 +19,7 @@ interface SecurityContextType {
   loginUser: (username: string) => Promise<boolean>;
   logoutUser: () => Promise<void>;
   toggleTheme: () => void;
+  updateUserProfile: (profile: Partial<UserSessionProfile>) => void;
 }
 
 const SecurityContext = createContext<SecurityContextType | undefined>(undefined);
@@ -89,7 +90,8 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
     };
 
     verifyIdentitySession();
-  }, [pathname]);
+    /* Clear out pathname from the dependency array to prevent overwriting local state changes on route traversal */
+  }, []); 
 
   const loginUser = async (username: string) => {
     try {
@@ -134,8 +136,15 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
+  const updateUserProfile = (updatedFields: Partial<UserSessionProfile>) => {
+    setUserProfile((prev) => {
+      if (!prev) return null;
+      return { ...prev, ...updatedFields };
+    });
+  };
+
   return (
-    <SecurityContext.Provider value={{ activeUserId, userProfile, loading, theme, loginUser, logoutUser, toggleTheme }}>
+    <SecurityContext.Provider value={{ activeUserId, userProfile, loading, theme, loginUser, logoutUser, toggleTheme, updateUserProfile }}>
       {children}
     </SecurityContext.Provider>
   );

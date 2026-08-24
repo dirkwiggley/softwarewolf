@@ -6,8 +6,10 @@ import PageGuard from '../PageGuard';
 import { useSecurity } from '../SecurityContext';
 
 export default function UserProfileSettingsPage() {
-  const { userProfile } = useSecurity();
+  /* Extract the new updateUserProfile utility function from your security context */
+  const { userProfile, updateUserProfile } = useSecurity();
   const activeUserId = userProfile?.id || null;
+  const userRole = userProfile?.role;
 
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
@@ -24,7 +26,7 @@ export default function UserProfileSettingsPage() {
     }
   }, [userProfile]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeUserId) return;
 
@@ -40,6 +42,12 @@ export default function UserProfileSettingsPage() {
       });
 
       if (!res.ok) throw new Error('Gateway rejected profile modification parameter rules.');
+
+      /* Fire the global context synchronization layer to instantly update memory state */
+      updateUserProfile({
+        displayName: displayName.trim(),
+        email: email.trim(),
+      });
 
       setMessage({ text: '✓ Profile updates applied successfully.', isError: false });
     } catch (err: any) {
@@ -98,10 +106,27 @@ export default function UserProfileSettingsPage() {
               <p className="text-xs opacity-40 mt-1.5">System identity handles cannot be altered without high-level administrative clearance vectors.</p>
             </div>
 
+            {/* Read-Only User Role Field with Native Multi-theme Badges */}
+            <div>
+              <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
+                Assigned Security Role
+              </label>
+              <div className="flex items-center gap-3 w-full rounded-lg border px-3 py-2 text-sm bg-transparent opacity-50 cursor-not-allowed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+                <span className="font-mono tracking-wide">{userRole}</span>
+                {userRole && (
+                  <span className={`role-badge-${userRole.toLowerCase()}`}>
+                    Active Tier
+                  </span>
+                )}
+              </div>
+              <p className="text-xs opacity-40 mt-1.5">Your security privilege level is determined strictly by infrastructure administration.</p>
+            </div>
+
             <div>
               <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
                 Public Display Name
               </label>
+
               <input
                 type="text"
                 value={displayName}

@@ -20,7 +20,7 @@ export default function UserManagementPage() {
   const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
   
-  const { userProfile } = useSecurity();
+  const { userProfile, updateUserProfile } = useSecurity();
   const activeUserId = userProfile?.id || null;
 
   const getAuthHeaders = () => ({
@@ -37,7 +37,7 @@ export default function UserManagementPage() {
 
   useEffect(() => { fetchUsers(); }, [activeUserId]);
 
-  const handleSave = async (formData: any) => {
+const handleSave = async (formData: any) => {
     setError(null);
     try {
       if (editingUser) {
@@ -48,7 +48,18 @@ export default function UserManagementPage() {
         });
         if (!res.ok) throw new Error('Failed to update user');
         const updated = await res.json();
+        
         setUsers(prev => prev.map(u => u.id === editingUser.id ? updated : u));
+
+        // If the administrator just edited their own active profile record, sync the global memory context layout instantly
+        if (editingUser.id === activeUserId) {
+          updateUserProfile({
+            displayName: updated.displayName,
+            email: updated.email,
+            role: updated.role
+          });
+        }
+
         setEditingUser(null);
       } else {
         const res = await fetch('/api/system/users', {
