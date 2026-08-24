@@ -16,6 +16,22 @@
   --color-role-manager: #d97706;     /* Amber 600 */
   --color-role-user: #059669;        /* Emerald 600 */
   --color-role-guest: #475569;       /* Slate 600 */
+
+  /* 1a. Register the animation token natively in Tailwind v4 */
+  --animate-slide-in-left: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  /* 1b. Define the native CSS keyframes within the configuration engine */
+  @keyframes slideInLeft {
+    from {
+      /* 4a. Change translation value to shift the element 100% offscreen to the left */
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 }
 
 /* Connect manual theme toggling directly to the HTML class list cascade */
@@ -62,3 +78,26 @@
   border-color: calc(var(--color-role-guest) + 20%);
   color: var(--color-role-guest);
 }
+/* Use standard native CSS properties inside media queries to keep PostCSS happy */
+@utility wolf-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  /* Tablet responsive adaptive scaling breakpoint updates */
+  @media (min-width: 768px) {
+    max-width: 48rem; /* Equivalent to max-w-3xl */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* PC high-density responsive layout structural limits */
+  @media (min-width: 1024px) {
+    max-width: 64rem; /* Equivalent to max-w-5xl */
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
