@@ -28,3 +28,29 @@ Whenever you want to add or modify rules inside your globals.css file moving for
       shortcut that relies entirely on Tailwind @apply classes 
       (e.g., @utility btn-blue { @apply bg-blue-500 text-white rounded; }). 
       This registers it natively within Tailwind's internal compilation layers.
+
+Cascade Rules for New ExtensionsNo Local CSS Customizations: 
+  Do not write independent CSS configurations inside local modules. If a page requires a new layout 
+  utility or structural variation, add it directly to @softwarewolf/ui/index.css.CentralizedSecurity
+  Enforcement: Sub-routes (e.g., /docs/api) must either inherit a parent folder layout.tsx running 
+  PageGuard or declare explicit guard lines individually to avoid accidentally leaking internal admin
+  routes.
+
+Architectural Standards for New PagesEvery new route folder created within apps/web/app/ must strictly
+follow a three-tier design layout to prevent design regression and maintain structural uniformity.
+┌──────────────────────────────────────────────────────────┐
+│ Main Layout Shell                                        │
+│ ┌──────────────────────────────────────────────────────┐ │
+│ │ <PageGuard allowedRoles={[...]} fallbackUrl="/home"> │ │
+│ │ ┌──────────────────────────────────────────────────┐ │ │
+│ │ │ Container Panel (.wolf-panel)                    │ │ │
+│ │ │ (Centered Layout, 40px Padding, Theme-Aware)    │ │ │
+│ │ └──────────────────────────────────────────────────┘ │ │
+│ └──────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+Security Layer: Wrap page compositions or sub-layouts in your authorization engine to intercept 
+  unauthorized traffic early in the rendering lifecycle.
+Layout Consistency: Restrict content width using your shared container tokens to match the 
+  high-density tables and control matrices of your core pages.
+Cascading Classes: Utilize Tailwind v4 native CSS variables (--color-wolf-*) for custom theme 
+  variations instead of hardcoded utility strings.
