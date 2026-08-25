@@ -6,6 +6,8 @@ import { useSecurity } from '../SecurityContext';
 
 export default function CompleteLoginPage() {
   const [username, setUsername] = useState('');
+  /* 8a. Initialize a local state string to track the password input value */
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -25,11 +27,12 @@ export default function CompleteLoginPage() {
     setSubmitting(true);
 
     try {
-      const success = await loginUser(username.trim());
+      /* Update the core context utility function call to pass both credentials tokens */
+      const success = await loginUser(username.trim(), password);
       if (success) {
         router.push('/home'); // Forwards newly authenticated entries to the true zone center
       } else {
-        setError('Authentication Failed: Identity username could not be verified.');
+        setError('Authentication Failed: Identity credentials could not be verified.');
       }
     } catch (err) {
       setError('System Error: Gateway interface connection failure.');
@@ -46,6 +49,7 @@ export default function CompleteLoginPage() {
     );
   }
 
+  /* Apply explicit underscores to satisfy the Tailwind v4 arbitrary math parser */
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
       {/* Login Card Panel — Padding expanded to add extra inner breathing room */}
@@ -79,6 +83,23 @@ export default function CompleteLoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               disabled={submitting}
               placeholder="e.g. admin"
+              required
+              className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
+              style={{ borderColor: 'var(--color-wolf-border)' }}
+            />
+          </div>
+
+          {/* Render the new password field element layout block */}
+          <div>
+            <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
+              Account Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={submitting}
+              placeholder="••••••••"
               required
               className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
               style={{ borderColor: 'var(--color-wolf-border)' }}

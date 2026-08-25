@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSecurity } from '../SecurityContext';
 import PageGuard from '../PageGuard';
-import ContextSwitcher from './components/ContextSwitcher';
 import UserForm from './components/UserForm';
 
 interface UserProfile {
@@ -106,10 +105,6 @@ const handleSave = async (formData: any) => {
 
           <h1 className="text-3xl font-bold tracking-tight mb-2">Security & Profile Directory</h1>
           
-          <div className="mb-6">
-            <ContextSwitcher />
-          </div>
-
           {error && (
             <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
               Error: {error}

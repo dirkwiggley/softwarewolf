@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
 import prisma from '../db.js';
 import { signToken } from '../utils/jwt.js';
 
@@ -6,10 +7,12 @@ import { signToken } from '../utils/jwt.js';
  * Handles the secure identity resolution and cookie generation.
  */
 export const login = async (req: Request, res: Response) => {
-  const { username } = req.body;
+  /* Destructure the password parameter out of the incoming request body */
+  const { username, password } = req.body;
 
-  if (!username) {
-    res.status(400).json({ error: 'Username parameter is required' });
+  /* Ensure both credentials parameters are supplied by the client */
+  if (!username || !password) {
+    res.status(400).json({ error: 'Username and password parameters are required' });
     return;
   }
 
@@ -17,6 +20,14 @@ export const login = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({ where: { username } });
 
     if (!user) {
+      res.status(401).json({ error: 'Identity credentials not found' });
+      return;
+    }
+
+    /* 3d. Validate the plain-text password input against the cryptographically hashed database string */
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
       res.status(401).json({ error: 'Identity credentials not found' });
       return;
     }

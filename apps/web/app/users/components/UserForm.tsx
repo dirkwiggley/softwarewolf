@@ -21,6 +21,8 @@ export default function UserForm({ editingUser, onSave, onCancel }: UserFormProp
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<'ADMIN' | 'MANAGER' | 'USER'>('USER');
+  /* 1a. Introduce a tracking string for the password state management vector */
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (editingUser) {
@@ -28,14 +30,21 @@ export default function UserForm({ editingUser, onSave, onCancel }: UserFormProp
       setDisplayName(editingUser.displayName);
       setEmail(editingUser.email);
       setRole(editingUser.role);
+      /* 1b. Empty the password field placeholder when toggling onto an edit target */
+      setPassword('');
     } else {
-      setUsername(''); setDisplayName(''); setEmail(''); setRole('USER');
+      setUsername(''); setDisplayName(''); setEmail(''); setRole('USER'); setPassword('');
     }
   }, [editingUser]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSave({ username, displayName, email, role });
+    /* 1c. Compile the credential bundle object—omitting an empty password property block if in edit mode */
+    const payload: any = { username, displayName, email, role };
+    if (!editingUser || password.trim() !== '') {
+      payload.password = password;
+    }
+    onSave(payload);
   };
 
   return (
@@ -93,6 +102,22 @@ export default function UserForm({ editingUser, onSave, onCancel }: UserFormProp
           <option value="MANAGER">MANAGER</option>
           <option value="ADMIN">ADMIN</option>
         </select>
+      </div>
+
+      {/* 1d. Mount the custom reactive password input block using smart placeholder rules */}
+      <div className="sm:col-span-2">
+        <label className="block text-xs font-medium opacity-80 mb-1.5">
+          {editingUser ? 'Override Account Password (Optional):' : 'Account Security Password:'}
+        </label>
+        <input 
+          type="password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          required={!editingUser} 
+          placeholder={editingUser ? "Leave completely blank to preserve current secure hash" : "••••••••"} 
+          className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500"
+          style={{ borderColor: 'var(--color-wolf-border)' }}
+        />
       </div>
       
       <div className="sm:col-span-2 mt-2 flex flex-col gap-2">

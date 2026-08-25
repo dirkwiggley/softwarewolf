@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
 import type { HealthResponse } from '@repo/types';
+import bcrypt from 'bcryptjs';
 import prisma from '../db.js';
 
-// 1. GET /api/system/health - Static application metric check
+// GET /api/system/health - Static application metric check
 export const getSystemHealth = (req: Request, res: Response<HealthResponse>) => {
   res.status(200).json({
     status: 'OK',
@@ -10,7 +11,7 @@ export const getSystemHealth = (req: Request, res: Response<HealthResponse>) => 
   });
 };
 
-// 2. GET /api/system/activities - Read your live data stream logs from MariaDB
+// GET /api/system/activities - Read your live data stream logs from MariaDB
 export const getActivities = async (req: Request, res: Response) => {
   try {
     const activities = await prisma.activity.findMany({
@@ -22,7 +23,7 @@ export const getActivities = async (req: Request, res: Response) => {
   }
 };
 
-// 3. POST /api/system/activities - Write a brand new state mutation log entry
+// POST /api/system/activities - Write a brand new state mutation log entry
 export const createActivity = async (req: Request, res: Response) => {
   const { title } = req.body;
   const activeUserId = req.user?.id; // Grabs active context identity safely from your parser layer
@@ -46,7 +47,7 @@ export const createActivity = async (req: Request, res: Response) => {
   }
 };
 
-// 4. GET /api/system/widgets - Fetches all layout control text blocks from MariaDB
+// GET /api/system/widgets - Fetches all layout control text blocks from MariaDB
 export const getWidgetControls = async (req: Request, res: Response) => {
   try {
     const controls = await prisma.widgetControl.findMany();
@@ -56,7 +57,7 @@ export const getWidgetControls = async (req: Request, res: Response) => {
   }
 };
 
-// 5. POST /api/system/widgets/seed - Emergency initializer to seed default cards text if empty
+// POST /api/system/widgets/seed - Emergency initializer to seed default cards text if empty
 export const seedWidgetControls = async (req: Request, res: Response) => {
   try {
     await prisma.widgetControl.upsert({
@@ -85,7 +86,7 @@ export const seedWidgetControls = async (req: Request, res: Response) => {
   }
 };
 
-// 6. DELETE /api/system/activities/:id - Removes a specific logging entry from MariaDB
+// DELETE /api/system/activities/:id - Removes a specific logging entry from MariaDB
 export const deleteActivity = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -104,7 +105,7 @@ export const deleteActivity = async (req: Request, res: Response) => {
   }
 };
 
-// 7. GET /api/system/users - Retrieve all registered profiles from MariaDB (Excludes sensitive hashes)
+// GET /api/system/users - Retrieve all registered profiles from MariaDB (Excludes sensitive hashes)
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({
@@ -116,7 +117,6 @@ export const getUsers = async (req: Request, res: Response) => {
         email: true,
         role: true,
         createdAt: true
-        // Explicit selection omitted the password string column to ensure security boundaries
       }
     });
     res.status(200).json(users);
@@ -125,7 +125,7 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-// 8. POST /api/system/users - Provision a brand new user profile record
+// POST /api/system/users - Provision a brand new user profile record
 export const createUser = async (req: Request, res: Response) => {
   const { username, displayName, email, role, password } = req.body;
 
@@ -135,13 +135,18 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   try {
+    /* 5b. Hash the incoming raw text password parameter with a 10-round cryptographic salt factor */
+    const rawPassword = password ? password.trim() : 'defaultpassword';
+    const encryptedPassword = await bcrypt.hash(rawPassword, 10);
+
     const newUser = await prisma.user.create({
       data: { 
         username: username.trim(), 
         displayName: displayName.trim(), 
         email: email.trim().toLowerCase(), 
         role,
-        password: password ? password.trim() : '' // Binds a safe blank fallback string matching schema rules
+        /* Bind the secure hashed password string value to your database write operation */
+        password: encryptedPassword
       },
       select: {
         id: true,
@@ -158,7 +163,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
-// 9. PATCH /api/system/users/:id - Edit an existing profile or change clearance roles
+// PATCH /api/system/users/:id - Edit an existing profile or change clearance roles
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { displayName, email, role, password } = req.body;
@@ -169,13 +174,22 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 
   try {
+    /* Initialize a placeholder variable for our password modification parameter */
+    let encryptedPassword = undefined;
+
+    /* Generate a fresh cryptographic hash only if a password string is explicitly supplied */
+    if (password && password.trim() !== '') {
+      encryptedPassword = await bcrypt.hash(password.trim(), 10);
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id },
       data: { 
         ...(displayName && { displayName: displayName.trim() }),
         ...(email && { email: email.trim().toLowerCase() }),
         ...(role && { role }),
-        ...(password !== undefined && { password: password.trim() })
+        /* Feed the hashed password string to the Prisma modification data payload if present */
+        ...(encryptedPassword !== undefined && { password: encryptedPassword })
       },
       select: {
         id: true,
@@ -192,7 +206,7 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-// 10. DELETE /api/system/users/:id - Removes a specific user profile from MariaDB (Restricted to Admin)
+// DELETE /api/system/users/:id - Removes a specific user profile from MariaDB (Restricted to Admin)
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const currentUser = req.user;

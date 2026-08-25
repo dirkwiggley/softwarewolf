@@ -16,7 +16,7 @@ interface SecurityContextType {
   userProfile: UserSessionProfile | null;
   loading: boolean;
   theme: 'light' | 'dark';
-  loginUser: (username: string) => Promise<boolean>;
+  loginUser: (username: string, password: string) => Promise<boolean>;
   logoutUser: () => Promise<void>;
   toggleTheme: () => void;
   updateUserProfile: (profile: Partial<UserSessionProfile>) => void;
@@ -93,12 +93,12 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
     /* Clear out pathname from the dependency array to prevent overwriting local state changes on route traversal */
   }, []); 
 
-  const loginUser = async (username: string) => {
+  const loginUser = async (username: string, password: string) => {
     try {
       const response = await fetch('/api/system/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
+        body: JSON.stringify({ username, password })
       });
 
       if (response.ok) {
