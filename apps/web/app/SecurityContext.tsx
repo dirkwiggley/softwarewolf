@@ -29,7 +29,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
   const [userProfile, setUserProfile] = useState<UserSessionProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -58,32 +58,39 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const verifyIdentitySession = async () => {
       try {
+        // 1. Check if this specific tab has been verified during this tab's active window life
+        const tabVerified = sessionStorage.getItem('wolf_tab_session_active');
+
+        // 2. If the tab was closed/restored, clear out old states and force a strict security check
+        if (!tabVerified) {
+          sessionStorage.clear(); // Wipe out any loose guest allowances
+        }
+
         const response = await fetch('/api/system/auth/me');
+
         if (response.ok) {
           const profile: UserSessionProfile = await response.json();
+
+          // 3. Strict guard: If the server returned a guest profile but they managed to bypass a route, catch it
+          if (profile.role === 'GUEST') {
+            throw new Error('Server session expired');
+          }
+
           setActiveUserId(profile.id);
           setUserProfile(profile);
+
+          // 4. Mark this specific tab instance as successfully authenticated
+          sessionStorage.setItem('wolf_tab_session_active', 'true');
         } else {
           // Fallback strategy: Assign Guest profile if the network call rejects
           setActiveUserId(null);
-          setUserProfile({
-            id: null,
-            username: null,
-            displayName: 'Anonymous Guest',
-            email: null,
-            role: 'GUEST'
-          });
+          setUserProfile({ id: null, username: null, displayName: 'Anonymous Guest', email: null, role: 'GUEST' });
         }
       } catch (error) {
-        // Network failure fallback
+        // Network failure or security fallback
         setActiveUserId(null);
-        setUserProfile({
-          id: null,
-          username: null,
-          displayName: 'Anonymous Guest',
-          email: null,
-          role: 'GUEST'
-        });
+        setUserProfile({ id: null, username: null, displayName: 'Anonymous Guest', email: null, role: 'GUEST' });
+        sessionStorage.removeItem('wolf_tab_session_active');
       } finally {
         setLoading(false);
       }
@@ -91,7 +98,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
 
     verifyIdentitySession();
     /* Clear out pathname from the dependency array to prevent overwriting local state changes on route traversal */
-  }, []); 
+  }, []);
 
   const loginUser = async (username: string, password: string) => {
     try {

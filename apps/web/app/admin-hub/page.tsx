@@ -2,29 +2,25 @@
 
 import Link from 'next/link';
 import PageGuard from '../PageGuard';
+import { PageHeader } from '@softwarewolf/ui/page-header';
 
 export default function RootIndexPortalPage() {
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>
+      <PageHeader
+        title="Admin Hub"
+        description="Starting point for all things admin."
+        center={true}
+      />
+
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
-      <div className="flex w-full justify-center px-6 py-16">
-        
-        {/* Inner content box that maintains the strict left alignment format for your grid matrix */}
+      <div className="flex w-full justify-center px-6 py-8">
+        {/* Inner content box that maintains the strict left alignment format for the grid matrix */}
         <div className="w-full max-w-4xl text-left">
-          
-          {/* Header Branding Panel */}
-          <header className="mb-12 border-b pb-8" style={{ borderColor: 'var(--color-wolf-border)' }}>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-              SoftwareWolf Ecosystem
-            </h1>
-            <p className="mt-3 text-base opacity-70">
-              Application command center and environment settings.
-            </p>
-          </header>
 
           {/* Dynamic Section Matrix Layout */}
           <main className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            
+
             {/* Main User Workspace Module */}
             <section className="wolf-panel flex flex-col justify-between">
               <div>
@@ -47,13 +43,13 @@ export default function RootIndexPortalPage() {
                 <div className="mb-4 inline-flex items-center">
                   <span className="role-badge-manager">Management</span>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2">Identity Directory</h2>
+                <h2 className="text-xl font-bold tracking-tight mb-2">User Admin</h2>
                 <p className="text-sm opacity-70 mb-6 leading-relaxed">
-                  Administer user profiles, toggle permission vectors, and handle database identity credentials.
+                  Administer user profiles, set permissions, etc.
                 </p>
               </div>
               <Link href="/users" className="wolf-btn-primary w-full text-sm">
-                Open Directory →
+                Open User Admin →
               </Link>
             </section>
 

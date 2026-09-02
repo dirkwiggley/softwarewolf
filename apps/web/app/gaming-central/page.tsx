@@ -9,8 +9,6 @@ export default function GamingCentralPage() {
 
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
-      
-      {/* Newly integrated reusable page header component */}
       <PageHeader 
         title="Gaming Central" 
         description="Where we talk about, well game stuff." 

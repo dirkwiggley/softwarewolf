@@ -57,7 +57,7 @@ export default function CompleteLoginPage() {
         {/* Header Branding Panel */}
         <div className="mb-6">
           <h1 className="text-xl font-bold tracking-tight mb-1">
-            SoftwareWolf Home
+            SoftwareWolf Login
           </h1>
           <p className="text-sm opacity-70 leading-relaxed">
             Input your username and password to login.
@@ -111,7 +111,7 @@ export default function CompleteLoginPage() {
             disabled={submitting}
             className="wolf-btn-primary w-full text-sm font-semibold py-2.5 mt-2"
           >
-            {submitting ? 'Verifying Gateway...' : 'Request Clearance'}
+            {submitting ? 'Verifying Gateway...' : 'Login'}
           </button>
         </form>
 

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PageGuard from '../PageGuard';
 import { useSecurity } from '../SecurityContext';
+import { PageHeader } from '@softwarewolf/ui/page-header';
 
 export default function UserProfileSettingsPage() {
   /* Extract the new updateUserProfile utility function from your security context */
@@ -26,7 +27,7 @@ export default function UserProfileSettingsPage() {
     }
   }, [userProfile]);
 
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeUserId) return;
 
@@ -68,14 +69,17 @@ const handleSubmit = async (e: React.FormEvent) => {
   return (
     // Restricts page strictly to authenticated accounts, keeping GUEST entities locked out
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER']}>
-      {/* Outer structural layout wrapper: Centers the panel block horizontally on the monitor */}
-      <div className="flex w-full justify-center px-6 py-16">
-        
+      <PageHeader
+        title="User Profile"
+        description="Modify your user profile."
+        center={true}
+      />
+
+      {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
+      <div className="flex w-full justify-center px-6 py-8">
+
         {/* Inner content box: Enforces left-aligned forms and data layout parameters */}
         <div className="w-full max-w-xl text-left">
-          
-          <h1 className="text-3xl font-bold tracking-tight mb-1">Account Parameters</h1>
-          <p className="text-sm opacity-70 mb-8">Modify your primary identity display attributes and notification nodes.</p>
 
           {message && (
             <div className={`mb-6 rounded-lg border p-3 text-sm leading-relaxed ${message.isError ? 'border-red-500/20 bg-red-500/10 text-red-500' : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-500'}`}>
@@ -85,10 +89,10 @@ const handleSubmit = async (e: React.FormEvent) => {
 
           {/* Settings Workspace Sheet Card */}
           <form onSubmit={handleSubmit} className="wolf-panel flex flex-col gap-5">
-            
+
             <div>
               <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
-                Core System Username
+                System Username
               </label>
               <input
                 type="text"
@@ -97,7 +101,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none opacity-40 cursor-not-allowed"
                 style={{ borderColor: 'var(--color-wolf-border)' }}
               />
-              <p className="text-xs opacity-40 mt-1.5">System identity handles cannot be altered without high-level administrative clearance vectors.</p>
+              <p className="text-xs opacity-40 mt-1.5">System names cannot be altered without high-level administrative clearance.</p>
             </div>
 
             {/* Read-Only User Role Field with Native Multi-theme Badges */}
@@ -113,7 +117,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </span>
                 )}
               </div>
-              <p className="text-xs opacity-40 mt-1.5">Your security privilege level is determined strictly by infrastructure administration.</p>
+              <p className="text-xs opacity-40 mt-1.5">Your security privilege level is assigned by administrators.</p>
             </div>
 
             <div>

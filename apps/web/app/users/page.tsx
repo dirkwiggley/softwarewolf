@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSecurity } from '../SecurityContext';
 import PageGuard from '../PageGuard';
 import UserForm from './components/UserForm';
+import { PageHeader } from '@softwarewolf/ui/page-header';
 
 interface UserProfile {
   id: string;
@@ -92,26 +93,16 @@ const handleSave = async (formData: any) => {
 
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>
+      <PageHeader
+        title="Security & Profile Admin"
+        description=""
+      />
+
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
       <div className="flex w-full justify-center px-6 py-12">
         
         {/* Inner content box that maintains the strict left alignment format for your directory details */}
         <div className="w-full max-w-2xl text-left">
-          
-          <div className="mb-6">
-            {userRole === 'ADMIN' && (
-              <Link href="/admin-hub" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
-                ← Back to Admin Hub
-              </Link>
-            )}
-            {userRole != 'ADMIN' && (
-              <Link href="/home" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
-                ← Back to Home
-              </Link>
-            )}
-          </div>
-
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Security & Profile Directory</h1>
           
           {error && (
             <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
@@ -156,6 +147,14 @@ const handleSave = async (formData: any) => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mb-6">
+            {userRole === 'ADMIN' && (
+              <Link href="/admin-hub" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+                ← Back to Admin Hub
+              </Link>
+            )}
           </div>
 
         </div>

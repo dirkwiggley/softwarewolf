@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import PageGuard from '../PageGuard';
 import { useSecurity } from '../SecurityContext';
+import { PageHeader } from '@softwarewolf/ui/page-header';
 
 export default function HomeHubDashboard() {
   const { userProfile, logoutUser } = useSecurity();
@@ -24,29 +25,23 @@ export default function HomeHubDashboard() {
 
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
+      <PageHeader
+        title="Admin Dashboard"
+        description={
+          <>
+            Welcome back, <span className="font-semibold opacity-90">{userProfile?.displayName || 'Guest'}</span>
+            <span className={`uppercase tracking-wider px-2.5 py-0.5 text-xs font-bold rounded-md ${getRoleBadgeClass(userRole)}`}>
+              Scope: {userRole}
+            </span>
+          </>
+        }
+        center={true}
+      />
+
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
-      <div className="flex w-full justify-center px-6 py-12">
-        
+      <div className="flex w-full justify-center px-6 py-8">
         {/* Inner content box that maintains the strict left alignment format for your dashboard cards */}
         <div className="w-full max-w-3xl text-left">
-
-          {/* Hub Control Header */}
-          <header className="mb-12 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: 'var(--color-wolf-border)' }}>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">
-                Modular Hub Zone
-              </h1>
-              <p className="text-sm opacity-70 mt-1">
-                Ecosystem Control Dashboard — Welcome back, <span className="font-semibold opacity-90">{userProfile?.displayName || 'Guest'}</span>
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 self-start sm:self-auto">
-              <span className={`uppercase tracking-wider px-2.5 py-0.5 text-xs font-bold rounded-md ${getRoleBadgeClass(userRole)}`}>
-                Scope: {userRole}
-              </span>
-            </div>
-          </header>
 
           {/* Modular Workspace Dashboard Grid */}
           <main className={`grid grid-cols-1 gap-6 ${hasManagementClearance ? 'sm:grid-cols-2' : 'grid-cols-1'}`}>

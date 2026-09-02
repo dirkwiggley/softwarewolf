@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import PageGuard from '../PageGuard';
+import { PageHeader } from '@softwarewolf/ui/page-header';
 
 interface WidgetControl {
   controlKey: string;
@@ -40,21 +41,18 @@ export default function AdministrativeDashboardPage() {
   return (
     // Strictly locks this workspace view layout down to full Admin roles
     <PageGuard allowedRoles={['ADMIN']}>
+      <PageHeader
+        title="Infrastructure Control"
+        description="Ecosystem administration screen."
+        center={true}
+      />
+
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
-      <div className="flex w-full justify-center px-6 py-16">
+      <div className="flex w-full justify-center px-6 py-8">
         
         {/* Inner content box that maintains the strict left alignment format for your control room details */}
         <div className="w-full max-w-2xl text-left">
-          
-          <div className="mb-6">
-            <Link href="/admin-hub" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
-              ← Back to Admin Hub
-            </Link>
-          </div>
 
-          <h1 className="mb-2 text-4xl font-bold tracking-tight">Infrastructure Control</h1>
-          <p className="mb-12 text-sm opacity-70">Ecosystem administration screen.</p>
-          
           {error && (
             <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
               Layout Sync Error: {error}
@@ -90,6 +88,13 @@ export default function AdministrativeDashboardPage() {
             </div>
 
           </div>
+                    
+          <div className="mb-6">
+            <Link href="/admin-hub" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+              ← Back to Admin Hub
+            </Link>
+          </div>
+
         </div>
 
       </div>
