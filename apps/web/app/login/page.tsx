@@ -17,7 +17,7 @@ export default function CompleteLoginPage() {
   // Redirect users instantly if a background handshake shows they are already signed in
   useEffect(() => {
     if (!loading && userProfile && userProfile.role !== 'GUEST') {
-      router.push('/home'); // Sends user to the dashboard workspace hub
+      router.push('/'); // Sends user to the user landing page
     }
   }, [userProfile, loading, router]);
 
@@ -30,7 +30,7 @@ export default function CompleteLoginPage() {
       /* Update the core context utility function call to pass both credentials tokens */
       const success = await loginUser(username.trim(), password);
       if (success) {
-        router.push('/home'); // Forwards newly authenticated entries to the true zone center
+        router.push('/'); // Forwards newly authenticated entries to the root page
       } else {
         setError('Authentication Failed: Identity credentials could not be verified.');
       }
@@ -60,7 +60,7 @@ export default function CompleteLoginPage() {
             SoftwareWolf Home
           </h1>
           <p className="text-sm opacity-70 leading-relaxed">
-            Input your registered core account identity to gain infrastructure gateway clearance.
+            Input your username and password to login.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function CompleteLoginPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
-              Identity Username
+              Username
             </label>
             <input
               type="text"
@@ -92,7 +92,7 @@ export default function CompleteLoginPage() {
           {/* Render the new password field element layout block */}
           <div>
             <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
-              Account Password
+              Password
             </label>
             <input
               type="password"
@@ -120,7 +120,7 @@ export default function CompleteLoginPage() {
           onClick={() => {
             // Sets a temporary browser-tab scoped flag that disappears when they leave
             sessionStorage.setItem('wolf_guest_allowed', 'true');
-            router.push('/home');
+            router.push('home');
           }}
           className="w-full rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80 mt-2 cursor-pointer"
           style={{ borderColor: 'var(--color-wolf-border)', color: 'var(--color-wolf-text)' }}

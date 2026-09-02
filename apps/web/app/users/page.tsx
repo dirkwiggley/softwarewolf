@@ -21,6 +21,7 @@ export default function UserManagementPage() {
   
   const { userProfile, updateUserProfile } = useSecurity();
   const activeUserId = userProfile?.id || null;
+  const userRole = userProfile?.role || 'GUEST';
 
   const getAuthHeaders = () => ({
     'Content-Type': 'application/json'
@@ -98,9 +99,16 @@ const handleSave = async (formData: any) => {
         <div className="w-full max-w-2xl text-left">
           
           <div className="mb-6">
-            <Link href="/home" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
-              ← Back to Home Hub
-            </Link>
+            {userRole === 'ADMIN' && (
+              <Link href="/admin-hub" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+                ← Back to Admin Hub
+              </Link>
+            )}
+            {userRole != 'ADMIN' && (
+              <Link href="/home" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+                ← Back to Home
+              </Link>
+            )}
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight mb-2">Security & Profile Directory</h1>

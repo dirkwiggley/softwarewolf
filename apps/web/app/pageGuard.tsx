@@ -28,7 +28,7 @@ export default function PageGuard({ children, allowedRoles }: PageGuardProps) {
         return;
       }
 
-      // Role boundary rule: A cleared guest tries to access an explicit restriction zone (e.g., /dashboard)
+      // Role boundary rule: A cleared guest tries to access an explicit restriction zone (e.g., /admin-hub)
       if (activeRole === 'GUEST' && allowedRoles && !allowedRoles.includes('GUEST')) {
         router.replace('/login');
       }
@@ -68,10 +68,10 @@ export default function PageGuard({ children, allowedRoles }: PageGuardProps) {
               Switch Account
             </button>
             <button
-              onClick={() => router.push('/home')}
+              onClick={() => router.push('/')}
               style={{ padding: '8px 14px', background: 'transparent', color: '#a1a1aa', border: '1px solid #27272a', borderRadius: '6px', fontSize: '13px', fontWeight: '500', cursor: 'pointer' }}
             >
-              Return to Hub
+              Return to Welcome
             </button>
           </div>
         </div>

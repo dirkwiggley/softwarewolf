@@ -54,3 +54,20 @@ Layout Consistency: Restrict content width using your shared container tokens to
   high-density tables and control matrices of your core pages.
 Cascading Classes: Utilize Tailwind v4 native CSS variables (--color-wolf-*) for custom theme 
   variations instead of hardcoded utility strings.
+
+CURRENT FILE ARCHITECTURE STATE:
+1. WORKSPACE LAYOUT & TECH STACK:
+   - Structure: npm workspaces monorepo with `apps/web` (Next.js), `apps/docs` (Express microservice), and `packages/ui` (shared design configs).
+   - Styling: Tailwind v4 compilation engine using global stylesheets (`apps/web/app/globals.css` and `packages/ui/index.css`).
+   - Database: MariaDB managed via Prisma 7 using a native JS Driver Adapter in `apps/docs/src/db.ts`.
+2. Sass could not be used due to an overwhelming number of conflicts.
+3. apps/docs/prisma/schema.prisma: Updated 'User' table with a 'password' field (String @default("")).
+4. apps/docs/src/utils/jwt.ts: Exposes 'signToken' and 'verifyToken' utilities encoding userId, role, username, displayName, and email into a 24-hour expiration token payload.
+5. apps/docs/src/middlewares/auth.ts: Intercepts 'auth_token' cookie. If missing or invalid, attaches an anonymous guest fallback request profile ({ id: null, role: 'GUEST', displayName: 'Anonymous Guest' }). Otherwise, decodes the true JWT data. Uses an Express global type extension for 'req.user'.
+6. apps/docs/src/controllers/system.ts: All administrative database CRUD functions fully written, casting 'req' to standard 'Request' type (relying on the global extension). Includes self-deletion guards for the active Admin.
+7. apps/web/app/SecurityContext.tsx: Client context rehydrating profile states dynamically from GET /api/system/auth/me. Exposes loginUser(username) and logoutUser().
+8. apps/web/app/PageGuard.tsx: Enforces strict route redirection. If a user is not logged in AND does not have 'sessionStorage.getItem("wolf_guest_allowed") === "true"', they are pushed instantly to /login. Guests trying to access non-guest paths are intercepted here.
+9. apps/web/app/page.tsx: Clean root index portal page listing links to all other active sections, protected by <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>.
+10. apps/web/app/home/page.tsx: Rebuilt into a true landing dashboard matrix with modular tiles. Masking rules hide the "Security & Profiles" module completely from accounts lacking management roles.
+11. apps/web/app/users/page.tsx: The User administration grid panel, completely relocated from 'app/home/users/page.tsx' to its own dedicated path, secured with <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>. Sub-components live inside 'app/users/components/'.
+12. apps/web/app/dashboard/page.tsx: Rebuilt as a highly secure area locked down exclusively to <PageGuard allowedRoles={['ADMIN']}>, retrieving layout widget rows from MariaDB via fetch.  

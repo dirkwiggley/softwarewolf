@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@softwarewolf/ui";
 @source "./**/*.{ts,tsx}";
+@source "../../../packages/ui/src/**/*.tsx";
 
 /* Tailwind Base Layer: Lowest priority cascade layer for global resets */
 @layer base {

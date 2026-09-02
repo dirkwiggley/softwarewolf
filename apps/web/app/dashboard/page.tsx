@@ -1,97 +1,111 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import PageGuard from '../PageGuard';
+import { useSecurity } from '../SecurityContext';
 
-interface WidgetControl {
-  controlKey: string;
-  heading: string;
-  bodyText: string;
-}
+export default function HomeHubDashboard() {
+  const { userProfile, logoutUser } = useSecurity();
+  const userRole = userProfile?.role || 'GUEST';
 
-export default function AdministrativeDashboardPage() {
-  const [widgets, setWidgets] = useState<WidgetControl[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  // Check if the current context possesses management permissions
+  const hasManagementClearance = userRole === 'ADMIN' || userRole === 'MANAGER';
 
-  useEffect(() => {
-    // Fetch layout rules dynamically through the Next.js proxy
-    fetch('/api/system/widgets')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to pull custom layouts');
-        return res.json();
-      })
-      .then((data: WidgetControl[]) => setWidgets(data))
-      .catch((err) => setError(err.message));
-  }, []);
-
-  // Helper function to find specific database card configurations safely
-  const getCardData = (key: string, defaultHeading: string, defaultBody: string) => {
-    const found = widgets.find(w => w.controlKey === key);
-    return {
-      heading: found ? found.heading : defaultHeading,
-      body: found ? found.bodyText : defaultBody
-    };
+  // Map user role string securely to our theme utility badges
+  const getRoleBadgeClass = (role: string) => {
+    switch (role) {
+      case 'ADMIN': return 'role-badge-admin';
+      case 'MANAGER': return 'role-badge-manager';
+      case 'USER': return 'role-badge-user';
+      default: return 'role-badge-guest';
+    }
   };
 
-  const homeCard = getCardData('home-hub-card', 'Home Hub', 'Loading...');
-  const metricsCard = getCardData('server-metrics-card', 'Server Metrics', 'Loading...');
-
   return (
-    // Strictly locks this workspace view layout down to full Admin roles
-    <PageGuard allowedRoles={['ADMIN']}>
+    <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
-      <div className="flex w-full justify-center px-6 py-16">
+      <div className="flex w-full justify-center px-6 py-12">
         
-        {/* Inner content box that maintains the strict left alignment format for your dashboard details */}
-        <div className="w-full max-w-2xl text-left">
-          
-          <div className="mb-6">
-            <Link href="/" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
-              ← Back to Root Index
-            </Link>
-          </div>
+        {/* Inner content box that maintains the strict left alignment format for your dashboard cards */}
+        <div className="w-full max-w-3xl text-left">
 
-          <h1 className="mb-2 text-4xl font-bold tracking-tight">Infrastructure Control</h1>
-          <p className="mb-12 text-sm opacity-70">Welcome to your centralized full-stack ecosystem administration screen.</p>
-          
-          {error && (
-            <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
-              Layout Sync Error: {error}
+          {/* Hub Control Header */}
+          <header className="mb-12 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: 'var(--color-wolf-border)' }}>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">
+                Modular Hub Zone
+              </h1>
+              <p className="text-sm opacity-70 mt-1">
+                Ecosystem Control Dashboard — Welcome back, <span className="font-semibold opacity-90">{userProfile?.displayName || 'Guest'}</span>
+              </p>
             </div>
+
+            <div className="flex items-center gap-3 self-start sm:self-auto">
+              <span className={`uppercase tracking-wider px-2.5 py-0.5 text-xs font-bold rounded-md ${getRoleBadgeClass(userRole)}`}>
+                Scope: {userRole}
+              </span>
+            </div>
+          </header>
+
+          {/* Modular Workspace Dashboard Grid */}
+          <main className={`grid grid-cols-1 gap-6 ${hasManagementClearance ? 'sm:grid-cols-2' : 'grid-cols-1'}`}>
+
+            {/* Summary Module Card 1: Conditionally Rendered for Management Personnel */}
+            {hasManagementClearance && (
+              <div className="wolf-panel flex flex-col justify-between">
+                <div>
+                  <h3 className="text-base font-semibold tracking-tight mb-2">
+                    Security & Profiles
+                  </h3>
+                  <p className="mb-6 text-sm opacity-70 leading-relaxed">
+                    Manage full monorepo user records, modify authorization clearance structures, or simulate target test environment context configurations natively.
+                  </p>
+                </div>
+                <Link href="/users" className="wolf-btn-primary w-full text-sm">
+                  Manage Directory →
+                </Link>
+              </div>
+            )}
+
+            {/* Summary Module Card 2: Restricted Performance Metrics Panel */}
+            {hasManagementClearance && (
+              <div className="wolf-panel flex flex-col justify-between">
+                <div>
+                  <h3 className={`text-base font-semibold tracking-tight mb-2 ${userRole === 'ADMIN' ? 'text-red-500' : ''}`}>
+                    Infrastructure Metrics 🔒
+                  </h3>
+                  <p className="mb-6 text-sm opacity-70 leading-relaxed">
+                    Review live operational pipeline streams and critical system activity logs loop workspaces. Access requires absolute master administrator clearance.
+                  </p>
+                </div>
+                <Link href="/admin-hub" className="w-full inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium text-white text-sm transition-colors duration-200" style={{ backgroundColor: 'var(--color-brand-500)' }}>
+                  Open Core Logs (under construction) →
+                </Link>
+              </div>
+            )}
+
+            {/* Fallback presentation viewport if account is basic USER or GUEST */}
+            {!hasManagementClearance && (
+              <div className="wolf-panel text-center py-12">
+                <p className="text-sm opacity-60">
+                  No active workspace modules are configured for this authorization layer. Additional universal content modules are currently under construction.
+                </p>
+              </div>
+            )}
+
+          </main>
+
+          {/* Global Navigation Matrix Portal Footer Shortcut */}
+          {hasManagementClearance && (
+            <footer className="mt-16 text-center">
+              <Link href="/admin-hub" className="text-sm opacity-60 hover:opacity-100 transition-opacity">
+                ← Return to Admin Hub
+              </Link>
+            </footer>
           )}
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            
-            {/* Module Card 1: Text loaded from MariaDB row 'home-hub-card' */}
-            <div className="wolf-panel flex flex-col justify-between">
-              <div>
-                <h3 className="text-lg font-semibold tracking-tight mb-2">{homeCard.heading}</h3>
-                <p className="mb-6 text-sm opacity-70 leading-relaxed">
-                  {homeCard.body}
-                </p>
-              </div>
-              <Link href="/home" className="wolf-btn-primary w-full text-sm">
-                Enter Hub →
-              </Link>
-            </div>
-
-            {/* Module Card 2: Text loaded from MariaDB row 'server-metrics-card' */}
-            <div className="wolf-panel flex flex-col justify-between">
-              <div>
-                <h3 className="text-lg font-semibold tracking-tight mb-2">{metricsCard.heading}</h3>
-                <p className="mb-6 text-sm opacity-70 leading-relaxed">
-                  {metricsCard.body}
-                </p>
-              </div>
-              <div className="role-badge-user text-center uppercase tracking-wider py-2 rounded-lg text-xs font-bold">
-                ✓ Pipeline Active
-              </div>
-            </div>
-
-          </div>
         </div>
-
       </div>
     </PageGuard>
   );

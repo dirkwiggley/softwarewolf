@@ -74,12 +74,6 @@ const handleSubmit = async (e: React.FormEvent) => {
         {/* Inner content box: Enforces left-aligned forms and data layout parameters */}
         <div className="w-full max-w-xl text-left">
           
-          <div className="mb-6">
-            <Link href="/home" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
-              ← Back to Dashboard Hub
-            </Link>
-          </div>
-
           <h1 className="text-3xl font-bold tracking-tight mb-1">Account Parameters</h1>
           <p className="text-sm opacity-70 mb-8">Modify your primary identity display attributes and notification nodes.</p>
 
@@ -164,7 +158,11 @@ const handleSubmit = async (e: React.FormEvent) => {
             </button>
 
           </form>
-
+          <div className="mb-6">
+            <Link href="/home" className="inline-flex items-center text-sm font-medium transition-colors hover:opacity-80" style={{ color: 'var(--color-brand-500)' }}>
+              ← Back to Welcome Page
+            </Link>
+          </div>
         </div>
       </div>
     </PageGuard>

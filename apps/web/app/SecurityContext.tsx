@@ -105,7 +105,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
         const profile: UserSessionProfile = await response.json();
         setActiveUserId(profile.id);
         setUserProfile(profile);
-        router.push('/home');
+        router.push('/');
         return true;
       }
       return false;

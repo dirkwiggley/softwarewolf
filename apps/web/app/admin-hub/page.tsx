@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import PageGuard from '../PageGuard';
 
-export default function SoftwarewolfHome() {
+export default function RootIndexPortalPage() {
   return (
-    <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
+    <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
       <div className="flex w-full justify-center px-6 py-16">
         
@@ -15,10 +15,10 @@ export default function SoftwarewolfHome() {
           {/* Header Branding Panel */}
           <header className="mb-12 border-b pb-8" style={{ borderColor: 'var(--color-wolf-border)' }}>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-              SoftwareWolf Home
+              SoftwareWolf Ecosystem
             </h1>
             <p className="mt-3 text-base opacity-70">
-              User home page. Under Construction
+              Application command center and environment settings.
             </p>
           </header>
 
@@ -37,7 +37,7 @@ export default function SoftwarewolfHome() {
                 </p>
               </div>
               <Link href="/dashboard" className="wolf-btn-primary w-full text-sm">
-                Launch Dashboard →
+                Launch Dashboard (Under Construction)→
               </Link>
             </section>
 
