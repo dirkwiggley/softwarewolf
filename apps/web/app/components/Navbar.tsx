@@ -99,7 +99,7 @@ export default function Navbar() {
             <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Settings</Link>
           )}
           {isManagement && (
-            <Link href="/users" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Profiles</Link>
+            <Link href="/admin-hub/users" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Profiles</Link>
           )}
           {userRole === 'ADMIN' && (
             <Link href="/admin-hub" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Admin Hub</Link>

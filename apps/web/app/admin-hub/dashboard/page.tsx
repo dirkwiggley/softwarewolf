@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import PageGuard from '../PageGuard';
-import { useSecurity } from '../SecurityContext';
+import PageGuard from '../../PageGuard';
+import { useSecurity } from '../../SecurityContext';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 
 export default function HomeHubDashboard() {
@@ -57,7 +57,7 @@ export default function HomeHubDashboard() {
                     Manage full monorepo user records, modify authorization clearance structures, or simulate target test environment context configurations natively.
                   </p>
                 </div>
-                <Link href="/users" className="wolf-btn-primary w-full text-sm">
+                <Link href="/admin-hub/users" className="wolf-btn-primary w-full text-sm">
                   Manage Directory →
                 </Link>
               </div>

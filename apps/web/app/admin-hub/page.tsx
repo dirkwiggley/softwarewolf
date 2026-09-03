@@ -32,7 +32,7 @@ export default function RootIndexPortalPage() {
                   Access your personalized operational environment modules, workflows, and account settings.
                 </p>
               </div>
-              <Link href="/dashboard" className="wolf-btn-primary w-full text-sm">
+              <Link href="/admin-hub/dashboard" className="wolf-btn-primary w-full text-sm">
                 Launch Dashboard (Under Construction)→
               </Link>
             </section>
@@ -48,7 +48,7 @@ export default function RootIndexPortalPage() {
                   Administer user profiles, set permissions, etc.
                 </p>
               </div>
-              <Link href="/users" className="wolf-btn-primary w-full text-sm">
+              <Link href="/admin-hub/users" className="wolf-btn-primary w-full text-sm">
                 Open User Admin →
               </Link>
             </section>
@@ -64,7 +64,7 @@ export default function RootIndexPortalPage() {
                   Monitor system metrics, review MariaDB logs, and synchronize structural layout parameters.
                 </p>
               </div>
-              <Link href="/control-room" className="wolf-btn-primary w-full text-sm">
+              <Link href="/admin-hub/control-room" className="wolf-btn-primary w-full text-sm">
                 Enter Control Room →
               </Link>
             </section>

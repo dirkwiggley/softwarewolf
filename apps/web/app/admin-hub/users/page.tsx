@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useSecurity } from '../SecurityContext';
-import PageGuard from '../PageGuard';
+import { useSecurity } from '../../SecurityContext';
+import PageGuard from '../../PageGuard';
 import UserForm from './components/UserForm';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 

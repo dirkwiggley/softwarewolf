@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import PageGuard from '../PageGuard';
+import PageGuard from '../../PageGuard';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 
 interface WidgetControl {
