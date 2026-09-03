@@ -53,7 +53,7 @@ export default function RootIndexPortalPage() {
               </Link>
             </section>
 
-            {/* Infrastructure Control Panel (Locked exclusively to Admin) */}
+            {/* Infrastructure Control Panel */}
             <section className="wolf-panel flex flex-col justify-between">
               <div>
                 <div className="mb-4 inline-flex items-center">

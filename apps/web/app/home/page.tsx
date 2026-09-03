@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import PageGuard from '../PageGuard';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 import { ImageWrapCard } from '@softwarewolf/ui/image-wrap-card';
+import Link from 'next/link';
 
 export default function SoftwarewolfHome() {
   const bodText = `Hello and welcome to a collection of articles, ideas, and tools for use with various RPGs. There are also sections available to members of my gaming friends for scheduling, interparty communications, and other useful things. If you find anything here useful or have some suggestions please give me a shout out from the contact page.
@@ -27,18 +27,6 @@ A session didn’t go by where someone would bring up some great one-liners made
         description="We're here for the hobby."
       />
 
-      <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
-          <ImageWrapCard
-            heading="Gaming Experiences: Tips and Ideas from a Veteran DM"
-            imageAlignment="center-right"
-            imageUrl="/Everward_1.png"
-            bodyText={bodText}
-            maxImageWidth='w-100'
-          />
-        </div>
-      </div>
-
       {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
       <div className="flex w-full justify-center px-6 py-16">
 
@@ -59,15 +47,57 @@ A session didn’t go by where someone would bring up some great one-liners made
                   My collected thoughts on gaming, art, and other nonsense.
                 </p>
               </div>
-              <div className="w-full text-center py-2 text-xs font-semibold uppercase tracking-wider opacity-40">
-                Under Construction
+              <Link href="/home/gaming-central" className="wolf-btn-primary w-full text-sm">
+                Gaming Central →
+              </Link>
+            </section>
+            {/* Pirates campaign Section */}
+            <section className="wolf-panel flex flex-col justify-between border-dashed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+              <div>
+                <div className="mb-4 inline-flex items-center">
+                  <span className="role-badge-guest">Public Access</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight mb-2">Pirates Campaign</h2>
+                <p className="text-sm opacity-60 mb-6 leading-relaxed">
+                  Campaign info on my Pirates Campaign.
+                </p>
               </div>
+              <Link href="/home/campaigns/pirates" className="wolf-btn-primary w-full text-sm">
+                Pirates →
+              </Link>
+            </section>
+            {/* General Gaming Section */}
+            <section className="wolf-panel flex flex-col justify-between border-dashed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+              <div>
+                <div className="mb-4 inline-flex items-center">
+                  <span className="role-badge-guest">Public Access</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight mb-2">Everward Campaign</h2>
+                <p className="text-sm opacity-60 mb-6 leading-relaxed">
+                  Campaign info on my Everward Campaign.
+                </p>
+              </div>
+              <Link href="/home/campaigns/everward" className="wolf-btn-primary w-full text-sm">
+                Gaming Central →
+              </Link>
             </section>
 
           </main>
         </div>
-
       </div>
+      
+      <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
+        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+          <ImageWrapCard
+            heading="Gaming Experiences: Tips and Ideas from a Veteran DM"
+            imageAlignment="center-right"
+            imageUrl="/Everward_1.png"
+            bodyText={bodText}
+            maxImageWidth='w-100'
+          />
+        </div>
+      </div>
+
     </PageGuard>
   );
 }

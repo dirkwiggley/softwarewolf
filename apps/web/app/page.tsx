@@ -10,7 +10,6 @@ export default function RootPage() {
   const router = useRouter();
   const { userProfile, loading } = useSecurity();
 
-  // Isolate the exact primitive variable needed for the layout router switch
   const userRole = userProfile?.role || 'GUEST';
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function RootPage() {
         router.replace("/login");
         break;
     }
-  }, [userRole, loading, router]); // Optimized dependencies prevent wasteful re-runs
+  }, [userRole, loading, router]);
 
   return (
     <div className="flex h-screen items-center justify-center bg-zinc-950 text-zinc-400">
