@@ -15,23 +15,21 @@ export default function GamingCentralPage() {
       />
 
       <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
-        {/* Card 1 Wrapper Container */}
         <div className="w-full max-w-3xl mx-auto md:w-[60%]">
           <ImageWrapCard
             heading="System Fluidics Diagnostics (Mobile Bottom)"
             imageAlignment="center-right"
-            imageUrl="/cat2.jpg"
+            imageUrl="/Everward_1.png"
             bodyText={bodText}
           />
         </div>
 
-        {/* Card 2 Wrapper Container */}
         <div className="w-full max-w-3xl mx-auto md:w-[60%]">
           <ImageWrapCard
             heading="Core Engine Analytics (Mobile Top)"
             imageAlignment="center-right"
             mobileImagePosition="top"
-            imageUrl="/cat2.jpg"
+            imageUrl="/Everward_1.png"
             bodyText={bodText}
           />
         </div>

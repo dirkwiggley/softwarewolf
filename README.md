@@ -163,3 +163,52 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
 - [Configuration Options](https://turborepo.dev/docs/reference/configuration)
 - [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+
+
+## Image sizing in ImageWrapCard
+The image size is controlled separately for desktop and mobile layouts.
+- Desktop image sizing
+The desktop image classes are created here:
+  const desktopImgClasses = `${maxImageWidth} h-auto rounded-lg object-cover ${getDesktopAlignmentClasses()}`;
+
+The maxImageWidth property is defined here:
+  `maxImageWidth?: string;`
+It has a default value of:
+  `maxImageWidth = 'w-40'`
+
+- The Tailwind class w-40 sets the image width to 10rem, which is typically 160 pixels.
+- The h-auto class automatically calculates the image height based on its aspect ratio.
+The desktop image uses these classes here:
+  `className={desktopImgClasses}`
+The desktop image width can be changed when using the component. For example:
+  In this example, w-56 determines the desktop image width instead of the default w-40.
+Note that the property maxImageWidth is optional so it can be overridden as desired. Some sample values:
+maxImageWidth="w-32"       // 8rem, typically 128px
+maxImageWidth="w-48"       // 12rem, typically 192px
+maxImageWidth="w-64"       // 16rem, typically 256px
+maxImageWidth="w-full"     // 100% width
+maxImageWidth="w-[280px]"  // exactly 280px
+
+- Mobile image sizing
+The mobile image uses these classes directly:
+  `className="w-full max-w-xs h-auto rounded-lg object-cover self-center"`
+
+The mobile sizing classes mean:
+  - `w-full:`
+    The image can expand to the full width of its parent container.
+  - `max-w-xs:`
+    The image cannot become wider than 20rem, which is typically 320 pixels.
+  - `h-auto:`
+    The image height is calculated automatically to preserve its aspect ratio.
+  - `self-center:`
+    The image is centered within the flex container.
+
+Summary
+Desktop image width:
+  Controlled by maxImageWidth, which defaults to w-40, or approximately 160 pixels.
+
+Mobile image width:
+  Controlled by w-full max-w-xs. The image can fill the available width but is limited to approximately 320 pixels.
+
+Image height:
+  Controlled by h-auto on both desktop and mobile.

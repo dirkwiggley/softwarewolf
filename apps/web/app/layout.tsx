@@ -4,7 +4,7 @@ import Navbar from './components/Navbar'; // Import the new global header
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Softwarewolf Home Ecosystem",
+  title: "Softwarewolf Home",
   description: "Monorepo Automated Security Control Center Hub",
 };
 
