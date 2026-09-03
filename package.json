@@ -1,12 +1,13 @@
 {
   "name": "softwarewolf-home",
   "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+"scripts": {
+  "build": "turbo run build",
+  "dev": "turbo run dev",
+  "start": "turbo run start --filter=web",
+  "lint": "turbo run lint",
+  "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+  "check-types": "turbo run check-types"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

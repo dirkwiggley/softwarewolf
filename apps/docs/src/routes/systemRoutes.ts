@@ -11,7 +11,7 @@ import {
   updateUser,
   deleteUser 
 } from '../controllers/system.js';
-import { login, logout, getMe } from '../controllers/auth';
+import { login, logout, getMe } from '../controllers/auth.js';
 import { restrictTo } from '../middlewares/auth.js';
 
 const router = Router();
