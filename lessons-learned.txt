@@ -1,4 +1,4 @@
-Whenever you want to add or modify rules inside your globals.css file moving forward,
+Whenever adding or modifying rules inside the globals.css file moving forward,
   keep these three key principles in mind to prevent styles from breaking or striking 
   each other out:
 1. The Rule of Isolation for Global Selectors (*, html, body)
@@ -67,7 +67,21 @@ CURRENT FILE ARCHITECTURE STATE:
 6. apps/docs/src/controllers/system.ts: All administrative database CRUD functions fully written, casting 'req' to standard 'Request' type (relying on the global extension). Includes self-deletion guards for the active Admin.
 7. apps/web/app/SecurityContext.tsx: Client context rehydrating profile states dynamically from GET /api/system/auth/me. Exposes loginUser(username) and logoutUser().
 8. apps/web/app/PageGuard.tsx: Enforces strict route redirection. If a user is not logged in AND does not have 'sessionStorage.getItem("wolf_guest_allowed") === "true"', they are pushed instantly to /login. Guests trying to access non-guest paths are intercepted here.
-9. apps/web/app/page.tsx: Clean root index portal page listing links to all other active sections, protected by <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>.
-10. apps/web/app/home/page.tsx: Rebuilt into a true landing dashboard matrix with modular tiles. Masking rules hide the "Security & Profiles" module completely from accounts lacking management roles.
-11. apps/web/app/users/page.tsx: The User administration grid panel, completely relocated from 'app/home/users/page.tsx' to its own dedicated path, secured with <PageGuard allowedRoles={['ADMIN', 'MANAGER']}>. Sub-components live inside 'app/users/components/'.
-12. apps/web/app/dashboard/page.tsx: Rebuilt as a highly secure area locked down exclusively to <PageGuard allowedRoles={['ADMIN']}>, retrieving layout widget rows from MariaDB via fetch.  
+9. apps/web/app/page.tsx: minimal page that looks at a user's role. If they have ADMIN or MANAGER then they are sent to admin-hub, otherwise they go to home
+
+THE devIndicator SHOWING IN DEV mode
+This is an overlay that is added by Next.js in dev mode. It gives you context about the active route such as Route State, Bundler Tracking, Build Activity
+If that overlay is getting in the way you can move or hide it by updating the apps/web/next.config.ts file:
+
+const nextConfig = {
+  devIndicators: {
+    position: 'bottom-right', // Options: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right'
+  },
+}
+
+or to disable it completely:
+
+const nextConfig = {
+  devIndicators: false, // Prevents the N icon from rendering at all, but still logs console errors
+}
+
