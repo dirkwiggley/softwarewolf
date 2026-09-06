@@ -1,16 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSecurity } from '../SecurityContext';
 
 export default function Navbar() {
-  /* Extract the logoutUser method from your security context hook */
   const { userProfile, theme, toggleTheme, logoutUser } = useSecurity();
   const pathname = usePathname();
   
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); // Hydration safety anchor
+
+  // Mark component instance as safely active on the browser window stack
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   const userRole = userProfile?.role || 'GUEST';
   const isManagement = userRole === 'ADMIN' || userRole === 'MANAGER';
@@ -40,7 +45,6 @@ export default function Navbar() {
             {userRole === 'ADMIN' && (
               <Link href="/admin-hub" className="hover:opacity-100 transition-opacity">Admin</Link>
             )}
-
           </div>
         </div>
 
@@ -52,10 +56,11 @@ export default function Navbar() {
             className="inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm font-semibold transition-colors hover:opacity-80 cursor-pointer"
             style={{ borderColor: 'var(--color-wolf-border)', color: 'var(--color-wolf-text)' }}
           >
-            {theme === 'light' ? '🌙' : '☀️'}
+            {/* Safe uniform character render fallback sequence matching initial layout states */}
+            {!mounted ? '🌙' : theme === 'light' ? '🌙' : '☀️'}
           </button>
 
-          {/* Desktop Logout Trigger: Only displays for authenticated accounts */}
+          {/* Desktop Logout Trigger */}
           {userRole !== 'GUEST' ? (
             <button
               onClick={logoutUser}
@@ -66,7 +71,6 @@ export default function Navbar() {
               Sign Out
             </button>
           ) : (
-            /* 1a. Desktop Guest Gateway Trigger: Only displays when on an unauthenticated path, hiding on /login itself */
             !isLoginPage && (
               <Link
                 href="/login"
@@ -105,7 +109,6 @@ export default function Navbar() {
             <Link href="/admin-hub" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Admin Hub</Link>
           )}
           
-          {/* 1b. Mobile Dropdown Conditional Gateway Trigger */}
           {userRole !== 'GUEST' ? (
             <button
               onClick={() => {

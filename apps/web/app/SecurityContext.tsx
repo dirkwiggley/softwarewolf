@@ -28,30 +28,37 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserSessionProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  // ... keep activeUserId, userProfile, and loading states exactly the same above ...
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [hydrated, setHydrated] = useState(false); // ADDED: Hydration check flag
 
   const router = useRouter();
 
-  // Synchronize localStorage preference and initialize theme matching on mount
+  // 1. Read layout preference cleanly from cookies on client-side component mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('wolf_theme') as 'light' | 'dark' | null;
+    const match = document.cookie.match(new RegExp('(^| )wolf_theme=([^;]+)'));
+    const savedTheme = match ? (match[2] as 'light' | 'dark') : null;
+
     if (savedTheme) {
       setTheme(savedTheme);
     } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark');
     }
+    setHydrated(true); // Mark hydration as complete once cookies are initialized
   }, []);
 
-  // Watch theme changes and apply class to documentElement for Tailwind v4
+  // 2. Watch theme changes and apply class to documentElement for Tailwind v4
   useEffect(() => {
+    if (!hydrated) return; // FIX: Blocks the client from wiping your server-rendered HTML class on mount!
+
     const root = window.document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('wolf_theme', theme);
-  }, [theme]);
+    document.cookie = `wolf_theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+  }, [theme, hydrated]);
 
   // Background identity check on component initialization
   useEffect(() => {
