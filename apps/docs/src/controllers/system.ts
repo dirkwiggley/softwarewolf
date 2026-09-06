@@ -135,7 +135,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   try {
-    /* 5b. Hash the incoming raw text password parameter with a 10-round cryptographic salt factor */
+    /* Hash the incoming raw text password parameter with a 10-round cryptographic salt factor */
     const rawPassword = password ? password.trim() : 'defaultpassword';
     const encryptedPassword = await bcrypt.hash(rawPassword, 10);
 

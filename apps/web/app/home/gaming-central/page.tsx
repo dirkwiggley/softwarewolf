@@ -1,6 +1,5 @@
 'use client';
 
-import { ImageWrapCard } from '@softwarewolf/ui/image-wrap-card';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 import PageGuard from '../../PageGuard';
 import { SectionHeader } from '@softwarewolf/ui/sectionHeader';
