@@ -37,7 +37,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
       {divider && (
         <hr 
           className="mt-4 border-t" 
-          style={{ borderColor: 'var(--color-wolf-border)', opacity: 0.4 }} 
+          style={{ borderColor: 'var(--color-wolf-border)', opacity: 0.9 }} 
         />
       )}
     </div>

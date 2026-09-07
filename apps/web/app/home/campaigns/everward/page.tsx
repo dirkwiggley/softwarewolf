@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import PageGuard from '../../../PageGuard';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 import { SectionHeader } from '@softwarewolf/ui/sectionHeader';
@@ -8,6 +9,7 @@ import { ListCardWrapper } from '@softwarewolf/ui/list-card-wrapper';
 import { ListCard } from '@softwarewolf/ui/list-card';
 
 export default function EverwardCampaignPage() {
+  const router = useRouter();
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
       <PageHeader
@@ -43,7 +45,7 @@ export default function EverwardCampaignPage() {
                 paragraph: 'Initial campaign notes for the players.',
                 button: {
                   text: 'Go →',
-                  onClick: () => alert('Player notes...'),
+                  onClick: () => router.push('/home/campaigns/everward/adventures-in-everward'),
                 },
               }}
             />
@@ -66,7 +68,7 @@ export default function EverwardCampaignPage() {
                 paragraph: 'A sample of postings and newsletters from Everward',
                 button: {
                   text: 'Go →',
-                  onClick: () => alert('Reading the flyers...'),
+                  onClick: () => router.push('/home/campaigns/everward/news-in-everward'),
                 },
               }}
             />
