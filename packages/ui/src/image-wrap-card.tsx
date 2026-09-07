@@ -95,12 +95,12 @@ export const ImageWrapCard: React.FC<ImageWrapCardProps> = ({
 
   return (
     <div
-      className="rounded-xl border p-6 transition-shadow duration-200"
-      style={{
-        backgroundColor: 'var(--color-wolf-card)',
-        borderColor: 'var(--color-wolf-border)',
-        color: 'var(--color-wolf-text)'
-      }}
+      /* 
+        Replaced the hardcoded theme variables with your shared global classes.
+        text-amber-950 and dark:text-amber-100 ensure text contrast stays perfectly 
+        readable on top of the alternate container panel states.
+      */
+      className="rounded-xl p-6 shadow-md bg-wolf-panel border-wolf-panel hover-wolf-panel text-amber-950 dark:text-amber-100"
     >
       <h3 className="text-xl font-bold tracking-tight mb-4">{heading}</h3>
 
@@ -113,7 +113,7 @@ export const ImageWrapCard: React.FC<ImageWrapCardProps> = ({
         <img
           src={imageUrl}
           alt={imageAlt}
-          className="w-full max-w-xs h-auto rounded-lg object-cover self-center"
+          className="w-full max-w-xs h-auto rounded-lg object-cover self-center border border-amber-900/10 dark:border-amber-100/10 shadow-sm"
         />
       </div>
 

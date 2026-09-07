@@ -6,7 +6,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: "Softwarewolf Home",
-  description: "Monorepo Automated Security Control Center Hub",
+  description: "A gaming website",
 };
 
 export default async function RootLayout({
@@ -17,15 +17,16 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const savedTheme = cookieStore.get("wolf_theme")?.value || "light";
 
-  // ADD THIS TEMPORARY LOG FOR DIAGNOSTICS:
-  console.log("=== SERVER THEME DIAGNOSTIC ===", {
-    allCookies: cookieStore.getAll().map(c => c.name),
-    extractedTheme: savedTheme
-  });
-
   return (
     <html lang="en" className={savedTheme === "dark" ? "dark" : ""}>
-      <body>
+      {/* 
+        bg-amber-50: Sets a warm, soft tan background for light mode
+        dark:bg-amber-950: Sets a deep medieval wood-brown background for dark mode
+        text-slate-900 / dark:text-amber-100: Automatically handles accessible font scaling contrast
+        min-h-screen: Ensures the background covers the full page height even on short pages
+        transition-colors: Smoothly blends the color shift when a user clicks the theme toggle button
+      */}
+      <body className="min-h-screen bg-amber-50 dark:bg-amber-950 text-slate-900 dark:text-amber-100 transition-colors duration-200">
         <SecurityProvider>
           <Navbar />
           {children}

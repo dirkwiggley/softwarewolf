@@ -32,12 +32,13 @@ export const ImageGalleryCard: React.FC<ImageGalleryCardProps> = ({
 
   return (
     <div
-      className="rounded-xl border p-6 transition-shadow duration-200 flex flex-col gap-6"
-      style={{
-        backgroundColor: 'var(--color-wolf-card)',
-        borderColor: 'var(--color-wolf-border)',
-        color: 'var(--color-wolf-text)',
-      }}
+    className="rounded-xl p-6 shadow-md bg-wolf-panel border-wolf-panel hover-wolf-panel text-amber-950 dark:text-amber-100"
+      // className="rounded-xl border p-6 transition-shadow duration-200 flex flex-col gap-6"
+      // style={{
+      //   backgroundColor: 'var(--color-wolf-card)',
+      //   borderColor: 'var(--color-wolf-border)',
+      //   color: 'var(--color-wolf-text)',
+      // }}
     >
       {/* Text Area Content Layout Block */}
       <div className="flex flex-col gap-4">
@@ -55,7 +56,8 @@ export const ImageGalleryCard: React.FC<ImageGalleryCardProps> = ({
               <img
                 src={img.url}
                 alt={img.alt || `Gallery image ${idx + 1}`}
-                className="w-full h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-[1.02]"
+                // className="w-full h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-[1.02]"
+                className="w-full max-w-xs h-auto rounded-lg object-cover self-center border border-amber-900/10 dark:border-amber-100/10 shadow-sm"
               />
             </div>
           ))}

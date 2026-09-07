@@ -10,26 +10,32 @@ import { ListCard } from '@softwarewolf/ui/list-card';
 
 export default function EverwardCampaignPage() {
   const router = useRouter();
+
+  // Uniform width class targeting full edge-to-edge mobile presentation and wide desktop panels
+  const widthContainerClass = "w-full max-w-5xl mx-0 md:mx-auto md:w-[85%]";
+
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
       <PageHeader
         title="The Everward Campaign"
-        description="Chronicles, operational theatres, and regional status logs of the Everward world."
+        description="From here you can find all of the campaign information."
       />
 
-      <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
+      {/* Replaced 'px-8' wrapper with a clean, flexible layout structure */}
+      <div className="pt-2 pb-8 flex flex-col gap-6">
         
-        {/* Core Header Section */}
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+        {/* Core Header Section - Formatted Wide */}
+        {/* <div className={`${widthContainerClass} px-4 md:px-0`}>
           <SectionHeader
             title="Campaign Operational Domains"
             subtitle="Explore primary strongholds, regional lore markers, and active tactical deployments."
             divider={true}
           />
-        </div>
+        </div> */}
 
-        {/* Content Section utilizing the new Square Border List Architecture with Parchment Parameter */}
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+        {/* Content Section utilizing matching wide alignment bounds */}
+        <div className={widthContainerClass}>
+          {/* Note: If ListCardWrapper supports custom className, you can pass 'rounded-none md:rounded-lg' here */}
           <ListCardWrapper bgImageUrl="/parchment.jpg">
             
             <ListCard

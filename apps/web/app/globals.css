@@ -34,6 +34,23 @@
   }
 }
 
+@layer utilities {
+  /* Custom background contrast panel */
+  .bg-wolf-panel {
+    @apply bg-amber-100/60 dark:bg-amber-900/30 backdrop-blur-[1px];
+  }
+
+  /* Custom solid borders */
+  .border-wolf-panel {
+    @apply border border-solid border-amber-900/30 dark:border-amber-400/20;
+  }
+
+  /* Custom interactive hover effects */
+  .hover-wolf-panel {
+    @apply transition-all duration-200 hover:shadow-lg hover:border-amber-800 dark:hover:border-amber-300;
+  }
+}
+
 /* Theme-Responsive Image Handling */
 .imgDark {
   display: none;

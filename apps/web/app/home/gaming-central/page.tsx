@@ -22,23 +22,30 @@ export default function GamingCentralPage() {
     { url: "https://i.imgur.com/7Q4QR0h.jpeg", alt: "A long hallway with crypts" }
   ]
 
+  // Standardized classes for full mobile width and expanded desktop width
+  const sectionClass = "w-full max-w-5xl mx-0 md:mx-auto md:w-[85%] bg-[url('/parchment.jpg')] dark:bg-[linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),url('/parchment.jpg')] bg-cover bg-center p-6 md:p-8 rounded-none md:rounded-lg shadow-md mb-6";
+
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
       <PageHeader
         title="Gaming Central"
         description="Where we talk about, well game stuff."
       />
+      {/* Wrapping the content blocks inside a main tag provides structured page-level layout constraints */}
+      <main className="py-4 flex flex-col">
 
-      <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+        {/* Overview Section */}
+        <div className={sectionClass}>
+
           <SectionHeader
             title="Dungeon Terrain"
             subtitle="I 3D print and paint rather a lot of terrain for my game. Here's a sample."
-            divider={true}
+            // divider={true}
           />
         </div>
 
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+        {/* Overview Section */}
+        <div className={sectionClass}>
           <ImageGalleryCard
             heading="Dice Tower"
             bodyText="This is one of my earliest prints. I made it for on of my kids"
@@ -47,7 +54,8 @@ export default function GamingCentralPage() {
           />
         </div>
 
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+        {/* Overview Section */}
+        <div className={sectionClass}>
           <ImageGalleryCard
             heading="Crypts"
             bodyText="This set terrified my players"
@@ -56,7 +64,7 @@ export default function GamingCentralPage() {
           />
         </div>
 
-      </div>
+      </main>
     </PageGuard>
   );
 }

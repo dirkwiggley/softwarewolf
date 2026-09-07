@@ -20,6 +20,8 @@ Shortly after that I met a great bunch of guys who liked my DMing. We decided to
 
 A session didn’t go by where someone would bring up some great one-liners made in a previous game. And the jokes sometime brough tears to our eyes. And through it all we really came together. Between games we shared real life success, failures, helped each out out when we needed it and even sometimes when it wasn’t asked for but still needed. I couldn’t begin to describe when these folks mean to me but I’m so glad they’re still here. This is why I game.`
 
+  const panelClass = "flex flex-col justify-between p-6 rounded-lg shadow-md bg-wolf-panel border-wolf-panel hover-wolf-panel";
+
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
       <PageHeader
@@ -27,58 +29,67 @@ A session didn’t go by where someone would bring up some great one-liners made
         description="We're here for the hobby."
       />
 
-      {/* Outer structural layout wrapper that covers the viewport width and centers its children horizontally */}
-      <div className="flex w-full justify-center px-6 py-16">
+      {/* Outer structural layout wrapper */}
+      <div className="flex w-full justify-center px-0 md:px-6 py-12">
 
-        {/* Inner content box that maintains the strict left alignment format for your grid matrix */}
-        <div className="w-full max-w-4xl text-left">
+        {/* Inner content box centered */}
+        <div className="w-full max-w-5xl text-left px-4 md:px-0">
 
           {/* Dynamic Section Matrix Layout */}
           <main className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
             {/* General Gaming Section */}
-            <section className="wolf-panel flex flex-col justify-between border-dashed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+            <section className={panelClass}>
               <div>
                 <div className="mb-4 inline-flex items-center">
-                  <span className="role-badge-guest">Public Access</span>
+                  {/* High contrast labels */}
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
+                    Public Access
+                  </span>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2">General Gaming</h2>
-                <p className="text-sm opacity-60 mb-6 leading-relaxed">
+                <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">General Gaming</h2>
+                <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
                   My collected thoughts on gaming, art, and other nonsense.
                 </p>
               </div>
-              <Link href="/home/gaming-central" className="wolf-btn-primary w-full text-sm">
+              <Link href="/home/gaming-central" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
                 Gaming Central →
               </Link>
             </section>
+
             {/* Pirates campaign Section */}
-            <section className="wolf-panel flex flex-col justify-between border-dashed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+            <section className={panelClass}>
               <div>
                 <div className="mb-4 inline-flex items-center">
-                  <span className="role-badge-guest">Public Access</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
+                    Public Access
+                  </span>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2">Pirates Campaign</h2>
-                <p className="text-sm opacity-60 mb-6 leading-relaxed">
+                <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">Pirates Campaign</h2>
+                <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
                   Campaign info on my Pirates Campaign.
                 </p>
               </div>
-              <Link href="/home/campaigns/pirates" className="wolf-btn-primary w-full text-sm">
+              <Link href="/home/campaigns/pirates" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
                 Pirates →
               </Link>
             </section>
-            {/* General Gaming Section */}
-            <section className="wolf-panel flex flex-col justify-between border-dashed" style={{ borderColor: 'var(--color-wolf-border)' }}>
+
+            {/* Everward Campaign Section */}
+            <section className={panelClass}>
               <div>
                 <div className="mb-4 inline-flex items-center">
-                  <span className="role-badge-guest">Public Access</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
+                    Public Access
+                  </span>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2">Everward Campaign</h2>
-                <p className="text-sm opacity-60 mb-6 leading-relaxed">
+                <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">Everward Campaign</h2>
+                <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
                   Campaign info on my Everward Campaign.
                 </p>
               </div>
-              <Link href="/home/campaigns/everward" className="wolf-btn-primary w-full text-sm">
-                Gaming Central →
+              <Link href="/home/campaigns/everward" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
+                Everward →
               </Link>
             </section>
 
@@ -86,8 +97,9 @@ A session didn’t go by where someone would bring up some great one-liners made
         </div>
       </div>
       
-      <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
+      {/* Lower Campaign Log Feature Block */}
+      <div className="pb-12 flex flex-col">
+        <div className="w-full max-w-5xl mx-0 md:mx-auto md:w-[85%] bg-[url('/parchment.jpg')] bg-cover bg-center p-6 md:p-8 rounded-none md:rounded-lg shadow-md border border-slate-800/20">
           <ImageWrapCard
             heading="Gaming Experiences: Tips and Ideas from a Veteran DM"
             imageAlignment="center-right"
