@@ -22,13 +22,24 @@ export const ListCardWrapper: React.FC<ListCardWrapperProps> = ({
   };
 
   return (
+    /* Added relative position container constraints to accurately lock down child bounds */
     <div
-      className={`rounded-none border p-6 flex flex-col gap-6 w-full ${
+      className={`relative rounded-none border p-6 flex flex-col gap-6 w-full ${
         bgImageUrl ? 'bg-cover bg-no-repeat bg-center' : ''
       } ${className}`}
       style={inlineStyles}
     >
-      {children}
+      {/* Dark mode overlay layer: transitions transparent asset masks during light mode, applies a 40% shade on dark */}
+      {bgImageUrl && (
+        <div 
+          className="absolute inset-0 z-0 bg-transparent dark:bg-black/40 pointer-events-none transition-colors duration-200" 
+        />
+      )}
+
+      {/* Content wrapper: forces content text nodes safely above our background texture and dark overlay layer */}
+      <div className="relative z-10 flex flex-col gap-6 w-full">
+        {children}
+      </div>
     </div>
   );
 };

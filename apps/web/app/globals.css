@@ -1,7 +1,11 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @import "@softwarewolf/ui";
 @source "./**/*.{ts,tsx}";
 @source "../../../packages/ui/src/**/*.tsx";
+
+/* ... leave your original base layers, resets, and custom .wolf-panel styles below exactly as they are ... */
+
 
 /* Tailwind Base Layer: Lowest priority cascade layer for global resets */
 @layer base {
