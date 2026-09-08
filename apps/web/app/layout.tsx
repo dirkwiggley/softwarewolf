@@ -3,11 +3,19 @@ import { cookies } from "next/headers";
 import { SecurityProvider } from './SecurityContext';
 import Navbar from './components/Navbar';
 import './globals.css';
+import { EB_Garamond } from 'next/font/google';
 
 export const metadata: Metadata = {
   title: "Softwarewolf Home",
-  description: "Monorepo Automated Security Control Center Hub",
+  description: "Dirk Wiggley's Gaming Site",
 };
+
+// Instantiate the font with your required character subsets
+const ebGaramond = EB_Garamond({
+  subsets: ['latin'],
+  variable: '--font-eb-garamond', // Define the custom CSS variable hook
+  display: 'swap',
+});
 
 export default async function RootLayout({
   children,

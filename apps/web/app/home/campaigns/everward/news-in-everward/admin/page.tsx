@@ -39,10 +39,10 @@ function AdminFormCore() {
   const [author, setAuthor] = useState('');
   const [sortOrder, setSortOrder] = useState('0');
   const [insertBreakAfter, setInsertBreakAfter] = useState(false);
-  
+
   // Nested Repeatable Sections State Mapping
   const [sections, setSections] = useState<Section[]>([{ heading: '', paragraphs: [''] }]);
-  
+
   // Optional Interactive Button Navigation State
   const [hasButton, setHasButton] = useState(false);
   const [buttonText, setButtonText] = useState('');
@@ -100,7 +100,7 @@ function AdminFormCore() {
   };
   const addParagraphToSection = (secIdx: number) => {
     const updated = [...sections];
-    if (!updated[secIdx]) return;
+    if (!updated[secIdx]) return
     updated[secIdx].paragraphs.push('');
     setSections(updated);
   };
@@ -170,7 +170,7 @@ function AdminFormCore() {
 
         <main className="py-4 flex flex-col items-center px-4 md:px-0">
           <form onSubmit={handleSubmit} className={sectionClass}>
-            
+
             {errorLog && (
               <div className="mb-6 p-4 bg-red-900/20 border border-red-700/40 rounded text-red-700 dark:text-red-300 text-xs font-semibold uppercase tracking-wider">
                 ⚠️ {errorLog}
@@ -181,22 +181,22 @@ function AdminFormCore() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-amber-950 dark:text-amber-200">Article Title</label>
-                <input 
-                  type="text" 
-                  value={title} 
+                <input
+                  type="text"
+                  value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full p-2.5 rounded bg-white/70 dark:bg-black/30 border border-amber-900/20 focus:outline-none focus:ring-2 focus:ring-amber-700 text-sm font-medium"
+                  className="w-full p-2.5 rounded bg-white/70 dark:bg-black/30 border border-amber-900/20 dark:border-amber-500/20 focus:outline-none focus:ring-2 focus:ring-amber-700 text-sm font-medium text-slate-900 dark:text-neutral-100"
                   placeholder="The Coming Storm..."
                 />
               </div>
 
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-amber-950 dark:text-amber-200">Chronicler / Author</label>
-                <input 
-                  type="text" 
-                  value={author} 
+                <input
+                  type="text"
+                  value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  className="w-full p-2.5 rounded bg-white/70 dark:bg-black/30 border border-amber-900/20 focus:outline-none focus:ring-2 focus:ring-amber-700 text-sm font-medium"
+                  className="w-full p-2.5 rounded bg-white/70 dark:bg-black/30 border border-amber-900/20 dark:border-amber-500/20 focus:outline-none focus:ring-2 focus:ring-amber-700 text-sm font-medium text-slate-900 dark:text-neutral-100"
                   placeholder="Scribe Benjamin"
                 />
               </div>
@@ -206,10 +206,10 @@ function AdminFormCore() {
             <div className="border-t border-amber-950/10 dark:border-amber-500/20 pt-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-extrabold uppercase tracking-wide text-amber-900 dark:text-amber-300">Content Sections</h3>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={addSection}
-                  className="px-3 py-1 text-[11px] font-bold uppercase tracking-wide bg-amber-800 text-white rounded hover:bg-amber-900 cursor-pointer transition-colors"
+                  className="px-3 py-1 text-[11px] font-bold uppercase tracking-wide bg-amber-800 text-white rounded hover:bg-amber-900 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500"
                 >
                   + Add Block Section
                 </button>
@@ -219,11 +219,11 @@ function AdminFormCore() {
                 <div key={secIdx} className="mb-6 p-4 rounded bg-white/40 dark:bg-black/20 border border-amber-950/5 dark:border-amber-500/10 flex flex-col gap-4">
                   <div className="flex flex-col gap-2">
                     <label className="text-[11px] font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">Section Sub-Heading (Optional)</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={sec.heading}
                       onChange={(e) => updateSectionHeading(secIdx, e.target.value)}
-                      className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 focus:outline-none focus:ring-1 focus:ring-amber-700 text-sm"
+                      className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 dark:border-amber-500/20 focus:outline-none focus:ring-1 focus:ring-amber-700 text-sm text-slate-900 dark:text-neutral-100"
                       placeholder="E.g., Whispers in the Tavern"
                     />
                   </div>
@@ -236,7 +236,7 @@ function AdminFormCore() {
                         value={p}
                         onChange={(e) => updateParagraph(secIdx, pIdx, e.target.value)}
                         rows={3}
-                        className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 focus:outline-none focus:ring-1 focus:ring-amber-700 text-sm leading-relaxed text-slate-900"
+                        className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 dark:border-amber-500/20 focus:outline-none focus:ring-1 focus:ring-amber-700 text-sm leading-relaxed text-slate-900 dark:text-neutral-100"
                         placeholder="Type historical account data here..."
                       />
                     ))}
@@ -256,21 +256,21 @@ function AdminFormCore() {
             <div className="border-t border-amber-950/10 dark:border-amber-500/20 pt-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-amber-950 dark:text-amber-200">Timeline Layout Order Index</label>
-                <input 
-                  type="number" 
-                  value={sortOrder} 
+                <input
+                  type="number"
+                  value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="w-32 p-2 rounded bg-white/70 dark:bg-black/30 border border-amber-900/20 text-sm font-medium"
+                  className="w-32 p-2 rounded bg-white/70 dark:bg-black/30 border border-amber-900/20 dark:border-amber-500/20 text-sm font-medium text-slate-900 dark:text-neutral-100"
                 />
               </div>
 
               <div className="flex items-center gap-3 md:pt-6">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   id="insertBreak"
-                  checked={insertBreakAfter} 
+                  checked={insertBreakAfter}
                   onChange={(e) => setInsertBreakAfter(e.target.checked)}
-                  className="w-4 h-4 rounded text-amber-700 accent-amber-800 cursor-pointer"
+                  className="w-4 h-4 rounded text-amber-700 accent-amber-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
                 <label htmlFor="insertBreak" className="text-xs font-bold uppercase tracking-wider text-amber-950 dark:text-amber-200 cursor-pointer select-none">
                   Mount Visual Break (<hr /> Division) After This Card
@@ -281,37 +281,37 @@ function AdminFormCore() {
             {/* Optional Interaction Call-to-Action Link Elements */}
             <div className="border-t border-amber-950/10 dark:border-amber-500/20 pt-6 mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   id="toggleButton"
-                  checked={hasButton} 
+                  checked={hasButton}
                   onChange={(e) => setHasButton(e.target.checked)}
-                  className="w-4 h-4 text-amber-700 accent-amber-800 cursor-pointer"
+                  className="w-4 h-4 text-amber-700 accent-amber-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
                 <label htmlFor="toggleButton" className="text-xs font-bold uppercase tracking-wider text-amber-950 dark:text-amber-200 cursor-pointer select-none">
                   Attach Dynamic Routing Button to Card Foot
                 </label>
               </div>
-              
+
               {hasButton && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded bg-white/40 dark:bg-black/20 border border-amber-950/5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded bg-white/40 dark:bg-black/20 border border-amber-950/5 dark:border-amber-500/10">
                   <div className="flex flex-col gap-2">
                     <label className="text-[11px] font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">Button Display Text</label>
-                    <input 
-                      type="text" 
-                      value={buttonText} 
+                    <input
+                      type="text"
+                      value={buttonText}
                       onChange={(e) => setButtonText(e.target.value)}
-                      className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 text-sm"
+                      className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 dark:border-amber-500/20 text-sm text-slate-900 dark:text-neutral-100"
                       placeholder="Read Full Decree"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-[11px] font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">Internal Navigation Destination Path</label>
-                    <input 
-                      type="text" 
-                      value={buttonHref} 
+                    <input
+                      type="text"
+                      value={buttonHref}
                       onChange={(e) => setButtonHref(e.target.value)}
-                      className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 text-sm"
+                      className="w-full p-2 rounded bg-white/60 dark:bg-black/20 border border-amber-900/10 dark:border-amber-500/20 text-sm text-slate-900 dark:text-neutral-100"
                       placeholder="/home/campaigns/everward/decrees/..."
                     />
                   </div>
@@ -321,17 +321,17 @@ function AdminFormCore() {
 
             {/* Form Execution Operations Bar */}
             <div className="flex items-center justify-end gap-4 border-t border-amber-950/10 dark:border-amber-500/20 pt-6">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => router.push('/home/campaigns/everward/news-in-everward')}
-                className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-transparent border border-amber-900/30 text-amber-950 dark:text-amber-200 rounded hover:bg-amber-950/5 transition-all cursor-pointer"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-transparent border border-amber-900/30 text-amber-950 dark:text-amber-200 rounded hover:bg-amber-950/5 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all cursor-pointer"
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 text-white rounded hover:bg-amber-900 disabled:opacity-50 cursor-pointer shadow transition-all"
+                className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 text-white rounded hover:bg-amber-900 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50 cursor-pointer shadow transition-all"
               >
                 {isSubmitting ? "Writing Coordinates..." : isEditMode ? "Save Changes" : "Commit Entry to Realm"}
               </button>

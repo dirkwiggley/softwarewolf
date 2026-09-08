@@ -26,7 +26,7 @@ interface NewsArticle {
 export default function NewsInEverward() {
   const router = useRouter();
   const { backgroundClass, textClass } = usePageTheme();
-  
+
   // Consume your centralized security state context cleanly
   const { userProfile, loading: authLoading } = useSecurity();
   const activeRole = userProfile?.role || 'GUEST';
@@ -79,7 +79,7 @@ export default function NewsInEverward() {
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
       <div className={`w-full min-h-[calc(100vh-73px)] pb-12 transition-colors duration-200 ${backgroundClass} ${textClass}`}>
-        
+
         {/* Permission Guided Administrative Button Panel */}
         {!authLoading && isAdminOrManager && (
           <div className="w-full bg-amber-950/10 dark:bg-black/40 border-b border-amber-800/20 py-3 px-4 md:px-8 flex justify-end">
@@ -105,11 +105,11 @@ export default function NewsInEverward() {
           ) : (
             <div className={sectionClass}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
+
                 {articles.map((article, idx) => (
                   <React.Fragment key={article.id || idx}>
-                    <div 
-                      className="flex flex-col justify-between border border-slate-800/10 dark:border-amber-500/20 border-t-4 border-t-amber-700 dark:border-t-amber-500 bg-white/50 dark:bg-black/40 backdrop-blur-[1px] p-6 rounded-b-md rounded-t-sm shadow-md transition-all hover:shadow-lg"
+                    <div
+                      className="flex flex-col justify-between border border-slate-800/10 dark:border-amber-500/20 border-t-4 border-t-amber-700 dark:border-t-amber-500 bg-white/50 dark:bg-zinc-950/80 backdrop-blur-[1px] p-6 rounded-b-md rounded-t-sm shadow-md transition-all hover:shadow-lg"
                     >
                       <div className="flex flex-col gap-4">
                         {/* Header Info Block */}
@@ -123,20 +123,20 @@ export default function NewsInEverward() {
                             </p>
                           </div>
 
-                          {/* 2. Admin Inline Modification Cluster */}
+                          {/* Admin Inline Modification Cluster */}
                           {!authLoading && isAdminOrManager && (
-                            <div className="flex items-center gap-2 shrink-0 bg-amber-950/5 dark:bg-black/30 p-1 rounded border border-amber-950/10">
+                            <div className="flex items-center gap-2 shrink-0 bg-amber-950/5 dark:bg-black/40 p-1 rounded border border-amber-950/10 dark:border-amber-500/20">
                               <button
                                 onClick={() => router.push(`/home/campaigns/everward/news-in-everward/admin?id=${article.id}`)}
                                 title="Edit Entry"
-                                className="p-1 text-xs hover:bg-amber-800/10 dark:hover:bg-amber-400/10 rounded text-amber-900 dark:text-amber-400 cursor-pointer"
+                                className="p-1 text-xs hover:bg-amber-800/10 dark:hover:bg-amber-400/20 rounded text-amber-900 dark:text-amber-400 cursor-pointer"
                               >
                                 ✏️
                               </button>
                               <button
                                 onClick={() => handleDeleteArticle(article.id)}
                                 title="Delete Entry"
-                                className="p-1 text-xs hover:bg-red-800/10 dark:hover:bg-red-400/10 rounded text-red-800 dark:text-red-400 cursor-pointer"
+                                className="p-1 text-xs hover:bg-red-800/10 dark:hover:bg-red-400/20 rounded text-red-800 dark:text-red-400 cursor-pointer"
                               >
                                 🗑️
                               </button>
@@ -155,7 +155,8 @@ export default function NewsInEverward() {
                                   {sec.heading}
                                 </h3>
                               )}
-                              
+
+                              {/* FIXED: Added explicit dark:text-neutral-200 node overrides to swap text color */}
                               <div className="flex flex-col gap-3 text-sm leading-relaxed text-slate-900 dark:text-neutral-200 font-medium opacity-90 dark:opacity-100">
                                 {sec.paragraphs.map((p, pIdx) => (
                                   <p key={pIdx}>{p}</p>
@@ -190,7 +191,6 @@ export default function NewsInEverward() {
                     )}
                   </React.Fragment>
                 ))}
-
               </div>
             </div>
           )}

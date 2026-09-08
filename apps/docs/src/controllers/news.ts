@@ -22,14 +22,16 @@ export const createNewsArticle = async (req: Request, res: Response) => {
       data: {
         title,
         author,
-        sections, // Stored directly as a MariaDB JSON array
-        button,   // Optional JSON object or null
+        // Cast as any to bypass the InputJsonValue restriction; the driver handles serialization
+        sections: sections as any, 
+        button: button as any,   
         sortOrder: Number(sortOrder) || 0,
         insertBreakAfter: Boolean(insertBreakAfter),
       },
     });
     res.status(201).json(newArticle);
   } catch (error) {
+    console.error("Database Transaction Error:", error);
     res.status(500).json({ error: 'Failed to create news article' });
   }
 };
@@ -39,7 +41,6 @@ export const updateNewsArticle = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     
-    // Type defense: ensure id is a valid single string parameter
     if (!id || typeof id !== 'string') {
       res.status(400).json({ error: 'A valid individual string ID parameter is required' });
       return;
@@ -48,18 +49,19 @@ export const updateNewsArticle = async (req: Request, res: Response) => {
     const { title, author, sections, button, sortOrder, insertBreakAfter } = req.body;
 
     const updatedArticle = await prisma.newsArticle.update({
-      where: { id }, // TypeScript is now 100% happy because 'id' is guaranteed to be a string
+      where: { id },
       data: {
         title,
         author,
-        sections,
-        button,
+        sections: sections as any,
+        button: button as any,
         sortOrder: Number(sortOrder),
         insertBreakAfter: Boolean(insertBreakAfter),
       },
     });
     res.status(200).json(updatedArticle);
   } catch (error) {
+    console.error("Database Transaction Error:", error);
     res.status(500).json({ error: 'Failed to update news article' });
   }
 };
