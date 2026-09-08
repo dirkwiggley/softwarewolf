@@ -5,7 +5,7 @@ import {
   createActivity,
   deleteActivity,
   getWidgetControls,
-  getWidgetControls as seedWidgetControls, // Adjusted fallback for local compile naming uniformity
+  getWidgetControls as seedWidgetControls,
   getUsers,
   createUser,
   updateUser,
@@ -13,13 +13,20 @@ import {
 } from '../controllers/system.js';
 import { login, logout, getMe } from '../controllers/auth.js';
 import { restrictTo } from '../middlewares/auth.js';
+// Import the new news controllers
+import { 
+  getNewsArticles, 
+  createNewsArticle, 
+  updateNewsArticle,
+  deleteNewsArticle // 1. Import the delete controller function
+} from '../controllers/news.js';
 
 const router = Router();
 
 // Core Identity Authentication Operations
 router.post('/auth/login', login);
 router.post('/auth/logout', logout);
-router.get('/auth/me', getMe); // Evaluated by requireAuth to catch guest parameters natively
+router.get('/auth/me', getMe);
 
 // Public / General Developer Routes
 router.get('/health', getSystemHealth);
@@ -28,6 +35,12 @@ router.post('/activities', createActivity);
 router.delete('/activities/:id', deleteActivity);
 router.get('/widgets', getWidgetControls);
 router.get('/widgets/seed', seedWidgetControls);
+
+// News Timeline Routes
+router.get('/news-articles', getNewsArticles);
+router.post('/news-articles', restrictTo('ADMIN', 'MANAGER'), createNewsArticle);
+router.patch('/news-articles/:id', restrictTo('ADMIN', 'MANAGER'), updateNewsArticle);
+router.delete('/news-articles/:id', restrictTo('ADMIN', 'MANAGER'), deleteNewsArticle); // 2. Guard delete operation
 
 // Secure Administrative User Management Routing Paths
 router.get('/users', restrictTo('ADMIN'), getUsers);

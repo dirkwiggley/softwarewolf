@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser()); // Enables parsing of incoming HttpOnly cookies
 app.use(requireAuth);    // Universally handles JWT checks and guest fallbacks
 
-app.use('/api/system', systemRouter);
+app.use('/api', systemRouter);
 
 /* Define the self-contained developer environment bootstrap function */
 async function bootstrapDevAdmin() {

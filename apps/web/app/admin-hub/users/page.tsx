@@ -37,7 +37,7 @@ export default function UserManagementPage() {
 
   const fetchUsers = () => {
     if (!activeUserId) { setUsers([]); return; }
-    fetch('/api/system/users', { headers: getAuthHeaders() })
+    fetch('/api/users', { headers: getAuthHeaders() })
       .then(res => { if (!res.ok) throw new Error(`HTTP Error ${res.status}`); return res.json(); })
       .then(data => { setUsers(data); setError(null); })
       .catch(err => setError(err.message));
@@ -69,7 +69,7 @@ export default function UserManagementPage() {
 
         setEditingUser(null);
       } else {
-        const res = await fetch('/api/system/users', {
+        const res = await fetch('/api/users', {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify(formData)

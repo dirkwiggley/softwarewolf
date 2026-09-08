@@ -145,9 +145,30 @@ exports.Prisma.WidgetControlScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NewsArticleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  author: 'author',
+  sections: 'sections',
+  button: 'button',
+  sortOrder: 'sortOrder',
+  insertBreakAfter: 'insertBreakAfter',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.UserOrderByRelevanceFieldEnum = {
@@ -175,6 +196,23 @@ exports.Prisma.WidgetControlOrderByRelevanceFieldEnum = {
   heading: 'heading',
   bodyText: 'bodyText'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.NewsArticleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  author: 'author'
+};
 exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
   MANAGER: 'MANAGER',
@@ -184,7 +222,8 @@ exports.Role = exports.$Enums.Role = {
 exports.Prisma.ModelName = {
   User: 'User',
   Activity: 'Activity',
-  WidgetControl: 'WidgetControl'
+  WidgetControl: 'WidgetControl',
+  NewsArticle: 'NewsArticle'
 };
 
 /**

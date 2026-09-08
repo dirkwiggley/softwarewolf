@@ -43,3 +43,18 @@ model WidgetControl {
   bodyText   String   @db.Text
   updatedAt  DateTime @updatedAt
 }
+
+// 5. NewsArticle Table for Campaign Chronicles & Timeline Events
+model NewsArticle {
+  id               String   @id @default(uuid())
+  title            String
+  author           String
+  sections         Json // Storing repeatable paragraphs array
+  button           Json? // Optional interactive action routing path
+  sortOrder        Int      @default(0)
+  insertBreakAfter Boolean  @default(false) // The dynamic <hr /> controller
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("news_articles")
+}

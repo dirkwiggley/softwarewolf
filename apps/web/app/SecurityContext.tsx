@@ -72,7 +72,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
           sessionStorage.clear(); // Wipe out any loose guest allowances
         }
 
-        const response = await fetch('/api/system/auth/me');
+        const response = await fetch('/api/auth/me');
 
         if (response.ok) {
           const profile: UserSessionProfile = await response.json();
@@ -108,7 +108,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
 
   const loginUser = async (username: string, password: string) => {
     try {
-      const response = await fetch('/api/system/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -129,7 +129,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
 
   const logoutUser = async () => {
     try {
-      await fetch('/api/system/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', { method: 'POST' });
     } catch (error) {
       console.error('Logout sync error:', error);
     } finally {
