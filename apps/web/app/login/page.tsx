@@ -3,21 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSecurity } from '../SecurityContext';
+import { usePageTheme } from '../hooks/usePageTheme'; // Import your structural hook
 
 export default function CompleteLoginPage() {
   const [username, setUsername] = useState('');
-  /* 8a. Initialize a local state string to track the password input value */
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const { userProfile, loginUser, loading } = useSecurity();
   const router = useRouter();
+  
+  // Consume your centralized layout page styling context properties
+  const { backgroundClass, textClass, cardClass } = usePageTheme();
 
-  // Redirect users instantly if a background handshake shows they are already signed in
   useEffect(() => {
     if (!loading && userProfile && userProfile.role !== 'GUEST') {
-      router.push('/'); // Sends user to the user landing page
+      router.push('/'); 
     }
   }, [userProfile, loading, router]);
 
@@ -27,10 +29,9 @@ export default function CompleteLoginPage() {
     setSubmitting(true);
 
     try {
-      /* Update the core context utility function call to pass both credentials tokens */
       const success = await loginUser(username.trim(), password);
       if (success) {
-        router.push('/'); // Forwards newly authenticated entries to the root page
+        router.push('/'); 
       } else {
         setError('Authentication Failed: Identity credentials could not be verified.');
       }
@@ -43,17 +44,26 @@ export default function CompleteLoginPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen w-full items-center justify-center p-4 text-xs font-medium opacity-60">
+      <div className={`flex min-h-screen w-full items-center justify-center p-4 text-xs font-medium opacity-60 ${backgroundClass} ${textClass}`}>
         Verifying security parameters...
       </div>
     );
   }
 
-  /* Apply explicit underscores to satisfy the Tailwind v4 arbitrary math parser */
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
-      {/* Login Card Panel — Padding expanded to add extra inner breathing room */}
-      <div className="wolf-panel w-full max-w-sm shadow-md">
+    /* 
+      min-h-[calc(100vh-73px)]: Accounts for navbar height so background layout fills perfectly
+      backgroundClass and textClass: Injects dynamic canvas values automatically
+    */
+    <div className={`flex min-h-[calc(100vh-73px)] w-full flex-col items-center justify-center px-4 py-12 transition-colors duration-200 ${backgroundClass} ${textClass}`}>
+      
+      {/* 
+        Login Card Panel — Uses cardClass to float beautifully off the main page canvas:
+        Light Mode: Clean solid white over a soft gray canvas
+        Dark Mode: Charcoal slate panel over a pure dark black canvas
+      */}
+      <div className={`w-full max-w-sm p-6 rounded-xl border shadow-md flex flex-col justify-between ${cardClass}`}>
+        
         {/* Header Branding Panel */}
         <div className="mb-6">
           <h1 className="text-xl font-bold tracking-tight mb-1">
@@ -84,12 +94,10 @@ export default function CompleteLoginPage() {
               disabled={submitting}
               placeholder="e.g. admin"
               required
-              className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
-              style={{ borderColor: 'var(--color-wolf-border)' }}
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
             />
           </div>
 
-          {/* Render the new password field element layout block */}
           <div>
             <label className="block text-xs font-semibold tracking-wider uppercase opacity-60 mb-1.5">
               Password
@@ -101,15 +109,14 @@ export default function CompleteLoginPage() {
               disabled={submitting}
               placeholder="••••••••"
               required
-              className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
-              style={{ borderColor: 'var(--color-wolf-border)' }}
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3 py-2 text-sm bg-transparent outline-none transition-colors focus:border-sky-500 disabled:opacity-40"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="wolf-btn-primary w-full text-sm font-semibold py-2.5 mt-2"
+            className="w-full text-sm font-semibold py-2.5 mt-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg shadow-sm transition-colors duration-150 ease-in-out cursor-pointer disabled:opacity-50"
           >
             {submitting ? 'Verifying Gateway...' : 'Login'}
           </button>
@@ -118,12 +125,10 @@ export default function CompleteLoginPage() {
         <button
           type="button"
           onClick={() => {
-            // Sets a temporary browser-tab scoped flag that disappears when they leave
             sessionStorage.setItem('wolf_guest_allowed', 'true');
             router.push('home');
           }}
-          className="w-full rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80 mt-2 cursor-pointer"
-          style={{ borderColor: 'var(--color-wolf-border)', color: 'var(--color-wolf-text)' }}
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 mt-2 cursor-pointer"
         >
           Continue as Guest
         </button>

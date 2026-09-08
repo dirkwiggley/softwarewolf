@@ -3,29 +3,40 @@
 import { PageHeader } from '@softwarewolf/ui/page-header';
 import PageGuard from "../../../../PageGuard";
 import { SectionHeader } from '@softwarewolf/ui/sectionHeader';
+import { usePageTheme } from '../../../../hooks/usePageTheme'; // Import your custom theme hook
 
 export default function AdventuresInEverward() {
+  // Consume your centralized layout page styling context properties
+  const { backgroundClass, textClass } = usePageTheme();
 
   // Standardized classes for full mobile width and expanded desktop width
+  // Note: Added a dark mode specific linear-gradient overlay to soften the parchment texture when dark mode is toggled!
   const sectionClass = "w-full max-w-5xl mx-0 md:mx-auto md:w-[85%] bg-[url('/parchment.jpg')] dark:bg-[linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),url('/parchment.jpg')] bg-cover bg-center p-6 md:p-8 rounded-none md:rounded-lg shadow-md mb-6";
-  
+
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
-      <PageHeader
-        title="Adventures in Everward"
-        description="Initial campaign notes."
-      />
+      {/* 
+        min-h-[calc(100vh-73px)]: Prevents layout height shifting issues
+        backgroundClass / textClass: Injects your rich high-fantasy campaign colors seamlessly
+      */}
+      <div className={`w-full min-h-[calc(100vh-73px)] pb-12 transition-colors duration-200 ${backgroundClass} ${textClass}`}>
+        
+        <PageHeader
+          title="Adventures in Everward"
+          description="Initial campaign notes."
+        />
 
-      {/* Wrapping the content blocks inside a main tag provides structured page-level layout constraints */}
-      <main className="py-4 flex flex-col">
+        {/* Wrapping the content blocks inside a main tag provides structured page-level layout constraints */}
+        <main className="py-4 flex flex-col">
 
-        {/* Overview Section */}
-        <div className={sectionClass}>
-          <SectionHeader
-            title="Overview"
-            subtitle="First time players should read this."
-          />
-          <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed opacity-95">
+          {/* Overview Section */}
+          <div className={sectionClass}>
+            <SectionHeader
+              title="Overview"
+              subtitle="First time players should read this."
+            />
+            <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed opacity-95 text-slate-900 dark:text-amber-50">
+
             <p>Everward is a high fantasy setting with many elements familiar to role players or readers of
               fantasy fiction. Most of the action in the games will take place in the kingdom of Everward,
               a mainly human populated kingdom with a mix of most of the worlds other species. Everward
@@ -53,12 +64,12 @@ export default function AdventuresInEverward() {
           </div>
         </div>
 
-        <div className={sectionClass}>
-          <SectionHeader
-            title="Species"
-            subtitle="A bit about the playable races."
-          />
-          <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed opacity-95">
+          <div className={sectionClass}>
+            <SectionHeader
+              title="Species"
+              subtitle="A bit about the playable races."
+            />
+            <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed opacity-95 text-slate-900 dark:text-amber-50">
             <p>The species most commonly seen throughout the kingdom in order of occurrence are: humans, half
               elves, gnomes, halflings, dwarves, half orcs, orcs, tieflings, wild elves, lizard folk. Citizens
               throughout the kingdom have slightly differing cultures as each city-state is unique though they
@@ -126,12 +137,12 @@ export default function AdventuresInEverward() {
           </div>
         </div>
 
-        <div className={sectionClass}>
-          <SectionHeader
-            title="Everward"
-            subtitle="A tiny bit of info on the country of Everward."
-          />
-          <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed opacity-95">
+          <div className={sectionClass}>
+            <SectionHeader
+              title="Everward"
+              subtitle="A tiny bit of info on the country of Everward."
+            />
+            <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed opacity-95 text-slate-900 dark:text-amber-50">
             <p>Everward is a kingdom consisting of seven city-states on the coast (Mossgard, Breadwardine, Helmfirth,
               Eldham, Everward, Shrieveport, and Eastguard) , three on the isle of Shieldwall (Wavemeet, Blackburn,
               and Westguard), one on the ilse of Whitecliff (Wrights Landing), six inland (Redwater, Brie, Vinehill,
@@ -145,9 +156,10 @@ export default function AdventuresInEverward() {
             <p>The capital of Everward is the largest of the city-states and the residence of the current king, Monroe
               the Fat (which is more a reference to his wealth than this physical shape). It is also the home of most
               of the countries guilds.</p>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </PageGuard >
   );
 }

@@ -1,37 +1,116 @@
 'use client';
 
-import { ImageWrapCard } from '@softwarewolf/ui/image-wrap-card';
-import { PageHeader } from '@softwarewolf/ui/page-header';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import PageGuard from '../../../PageGuard';
+import { PageHeader } from '@softwarewolf/ui/page-header';
+import { SectionHeader } from '@softwarewolf/ui/sectionHeader';
+import { usePageTheme } from '../../../hooks/usePageTheme';
 
-export default function GamingCentralPage() {
-  const bodText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel eros non nisl consequat cursus finibus id enim. Phasellus enim ante, cursus quis diam sit amet, varius accumsan erat. Vestibulum congue imperdiet arcu ut gravida. Proin eget velit est. Maecenas fermentum eros lorem, eget semper metus finibus eget. Cras ut nibh quis lacus sollicitudin ornare. Pellentesque vulputate vel erat nec mattis. Sed quis ornare nibh, sed gravida sapien. Mauris non lectus in orci finibus consequat aliquam in magna. Donec sit amet nunc vel tortor convallis sollicitudin. Praesent vitae placerat ex. Phasellus eget risus elementum, rutrum velit eget, cursus erat. Vivamus vitae iaculis purus. Cras porta ornare ligula non bibendum. Praesent laoreet pellentesque diam, ut finibus velit finibus at. Nunc malesuada neque risus, ut porttitor augue ultrices non. Quisque eu arcu nibh. In luctus tellus quis sapien lacinia, in dapibus ipsum rhoncus. Donec nisl ligula, varius et gravida sit amet, vulputate in metus. Aenean molestie nulla sit amet lorem placerat, a tempus diam finibus. Vestibulum tincidunt at nibh at maximus. Quisque tempor dolor vitae erat tincidunt, at rhoncus urna cursus. Integer quis lectus et eros aliquet luctus laoreet vitae nulla. Duis quis odio sed ante hendrerit viverra eu a odio. Fusce non neque at lorem vestibulum imperdiet. Pellentesque vel nisi enim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer id enim id ipsum malesuada molestie ut eu justo. Proin gravida quam quis neque tempus blandit. Sed fringilla porttitor est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Pellentesque lacinia suscipit ipsum, ut sodales diam egestas eget. Vestibulum imperdiet risus leo, sed blandit massa tristique ut. Curabitur eu cursus elit. Aliquam erat volutpat. Nunc sed fringilla metus. Quisque in justo eu neque vulputate porttitor. Duis placerat mi semper dictum ultricies. Phasellus eget dui porta, gravida ligula laoreet, molestie nisi. Integer ante nulla, fringilla id est vel, ultrices fringilla metus. Vestibulum a lorem tincidunt, sollicitudin sapien non, tincidunt arcu. Aenean sed velit id ante luctus vestibulum. Maecenas tempus sagittis lectus, eget vehicula ipsum aliquet nec. Praesent vehicula cursus est, eu sollicitudin lorem consectetur in. Sed id semper massa, eu dictum odio. Sed imperdiet luctus tellus quis dignissim. Etiam orci erat, lobortis id hendrerit nec, luctus ac erat. Nulla eu ante vel purus placerat dictum sit amet at sem. Donec lobortis, sapien eu scelerisque efficitur, orci eros sodales enim, et pulvinar ipsum ex in est. Curabitur facilisis convallis turpis, sed gravida neque laoreet eu. Nullam consequat sollicitudin sem vitae volutpat. Nullam leo velit, volutpat sit amet tempor ac, euismod sit amet eros. Nam lectus metus, ullamcorper et massa a, sagittis vehicula ligula. Maecenas rutrum diam lacus, faucibus dignissim quam egestas sagittis. Mauris neque mi, varius blandit interdum at, hendrerit aliquet lectus. Donec at ligula a eros elementum semper eu tempor eros. Aliquam sed urna sit amet neque varius suscipit ut sit amet odio. Vestibulum egestas et sapien eget sodales. Quisque dolor lectus, auctor quis blandit sit amet, vestibulum id mi. Quisque rutrum interdum erat eu imperdiet. Sed vestibulum nunc nibh, quis aliquam orci volutpat pharetra. Fusce est dolor, aliquet vitae neque nec, bibendum varius odio. Quisque aliquam id mauris eget consequat. Morbi scelerisque placerat ligula, eu consequat velit sollicitudin id. Nulla scelerisque enim a felis aliquam tristique. Phasellus bibendum semper sodales. Vivamus in pretium libero, vel vulputate lectus. Integer volutpat mi in dui facilisis interdum. In a nunc nisi. Nam mauris elit, tincidunt vitae erat et, consectetur maximus augue. Pellentesque laoreet auctor tempus. Maecenas elementum quis massa quis egestas. Quisque bibendum, enim pretium finibus tristique, tortor ipsum dignissim dolor, ut placerat elit lorem ac risus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc vulputate sem risus, a iaculis ligula blandit eget. Sed porta justo in hendrerit posuere. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer luctus, dui ac mattis sodales, est diam finibus augue, eu pretium nunc elit at ipsum"
+export default function PiratesCampaignPage() {
+  const router = useRouter();
+  
+  // Consume your centralized layout page styling context properties
+  const { backgroundClass, textClass, cardClass } = usePageTheme();
+
+  // Uniform width class matching the exact horizontal profile of the Everward layout
+  const widthContainerClass = "w-full max-w-5xl mx-0 md:mx-auto md:w-[85%]";
+
+  // Mock array for layout demonstration matching your modular card style mechanics
+  const PIRATE_MODULES = [
+    {
+      id: "01",
+      title: "The Ship's Log",
+      description: "Chronicles of the high seas, voyages undertaken, and active marine contracts.",
+      tag: "Active Voyage",
+      tagColor: "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20",
+      btnText: "Check Logbook →",
+      action: () => alert("Unrolling the captain's parchment log...")
+    },
+    {
+      id: "02",
+      title: "Ports of Call & Strongholds",
+      description: "A comprehensive map directory of black market havens, hidden coves, and naval blockades.",
+      tag: "Islands Map",
+      tagColor: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20",
+      btnText: "Chart Route →",
+      action: () => alert("Plotting navigation lines across the map...")
+    },
+    {
+      id: "03",
+      title: "The Crew & Infamy List",
+      description: "Profiles of active deckhands, trusted officers, and targeted pirate hunters of the crown.",
+      tag: "Manifest",
+      tagColor: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20",
+      btnText: "Inspect Crew →",
+      action: () => alert("Reviewing the articles of the ship's manifest...")
+    }
+  ];
 
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
-      <PageHeader 
-        title="Gaming Central" 
-        description="Where we talk about, well game stuff." 
-      />
+      {/* 
+        min-h-[calc(100vh-73px)]: Accounts for navbar dimensions smoothly
+        backgroundClass / textClass: Instantly delivers your weathered-stone and deep marine colors
+      */}
+      <div className={`w-full min-h-[calc(100vh-73px)] pb-12 transition-colors duration-200 ${backgroundClass} ${textClass}`}>
+        
+        <PageHeader
+          title="The Pirates Campaign"
+          description="Navigate the treacherous waters, track pirate crew allegiances, and manage your privateer fleets."
+        />
 
-      <div className="pt-2 px-8 pb-8 flex flex-col gap-8">
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
-          <ImageWrapCard
-            heading="System Fluidics Diagnostics (Mobile Bottom)"
-            imageAlignment="center-right"
-            imageUrl="/Everward_1.png"
-            bodyText={bodText}
-          />
-        </div>
+        <div className="pt-2 flex flex-col gap-6">
+          
+          {/* Section Header Content */}
+          <div className={`${widthContainerClass} px-4 md:px-0`}>
+            <SectionHeader
+              title="Navigational Operations Hub"
+              subtitle="Review your vessel metrics, active charts, and coastal rumors."
+              divider={true}
+            />
+          </div>
 
-        <div className="w-full max-w-3xl mx-auto md:w-[60%]">
-          <ImageWrapCard
-            heading="Core Engine Analytics (Mobile Top)"
-            imageAlignment="center-right"
-            mobileImagePosition="top"
-            imageUrl="/Everward_1.png"
-            bodyText={bodText}
-          />
+          {/* Grid Content Matrix - Utilizing matching wide layout constraints */}
+          <div className={`${widthContainerClass} px-4 md:px-0`}>
+            <main className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              
+              {PIRATE_MODULES.map((module) => (
+                <section 
+                  key={module.id} 
+                  className={`flex flex-col justify-between p-6 border rounded-xl shadow-md ${cardClass} hover:shadow-lg transition-all duration-200`}
+                >
+                  <div>
+                    {/* Thematic Category Indicator Badges */}
+                    <div className="mb-4 inline-flex items-center">
+                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${module.tagColor}`}>
+                        {module.tag}
+                      </span>
+                    </div>
+
+                    <h2 className="text-xl font-bold tracking-tight mb-2 dark:text-teal-50">
+                      <span className="font-mono text-sm opacity-40 mr-2">{module.id}</span>
+                      {module.title}
+                    </h2>
+                    
+                    <p className="text-sm leading-relaxed opacity-75 mb-6 text-slate-700 dark:text-slate-300">
+                      {module.description}
+                    </p>
+                  </div>
+
+                  {/* Nautical Theme Button: Deep Teal palette matching marine privateer profiles */}
+                  <button 
+                    onClick={module.action} 
+                    className="w-full text-center py-2.5 text-sm font-semibold rounded-lg bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors duration-150 cursor-pointer"
+                  >
+                    {module.btnText}
+                  </button>
+                </section>
+              ))}
+
+            </main>
+          </div>
+
         </div>
       </div>
     </PageGuard>

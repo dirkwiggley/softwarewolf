@@ -3,9 +3,12 @@
 import PageGuard from '../PageGuard';
 import { PageHeader } from '@softwarewolf/ui/page-header';
 import { ImageWrapCard } from '@softwarewolf/ui/image-wrap-card';
+import { usePageTheme } from '../hooks/usePageTheme';
 import Link from 'next/link';
 
 export default function SoftwarewolfHome() {
+  const { combined: pageThemeClasses } = usePageTheme();
+
   const bodText = `Hello and welcome to a collection of articles, ideas, and tools for use with various RPGs. There are also sections available to members of my gaming friends for scheduling, interparty communications, and other useful things. If you find anything here useful or have some suggestions please give me a shout out from the contact page.
 
 I discovered gaming at a Kay Bee Toys at the local shopping mall with my best friend about ’78. We convinced his mom to buy the D&D White Box and we brought it home. We read through the 3 books and loved the idea but man, coaxing playable rules out them was nigh impossible. We played a couple of games, with his mom DMing (she was super cool) and us playing. We muddled through the rules but still had a couple of good games. While we were playing a bunch of supplements came out including Eldritch Wizardy, Blackmoor, and Greyhawk, which we picked up. Those shed some more light on a working rule set but it was still pretty wonky. Fortunately the basic set (Blue box) came out around then so we grabbed that, read it over and found a much more playable rule set plus REAL DICE. Mind you, they were crappy plastic dice and eventually wore down but it was a big step up from pulling carboard chits out of a box top. These rules ruled! They actually mostly worked. By now my buddy and I couldn’t wait for our Saturday games and we’d talk about earlier sessions at school all the time. Somewhere between there and high school the 1st Ed Advanced D&D books came out. So did high-impact plastic dice. Which was great because all of the dice from our basic box were just about spheres.
@@ -24,92 +27,94 @@ A session didn’t go by where someone would bring up some great one-liners made
 
   return (
     <PageGuard allowedRoles={['ADMIN', 'MANAGER', 'USER', 'GUEST']}>
-      <PageHeader
-        title="Softwarewolf Home"
-        description="We're here for the hobby."
-      />
+      <div className={`min-h-[calc(100vh-73px)] w-full transition-colors duration-200 ${pageThemeClasses}`}>
 
-      {/* Outer structural layout wrapper */}
-      <div className="flex w-full justify-center px-0 md:px-6 py-12">
+        <PageHeader
+          title="Softwarewolf Home"
+          description="We're here for the hobby."
+        />
 
-        {/* Inner content box centered */}
-        <div className="w-full max-w-5xl text-left px-4 md:px-0">
+        {/* Outer structural layout wrapper */}
+        <div className="flex w-full justify-center px-0 md:px-6 py-12">
 
-          {/* Dynamic Section Matrix Layout */}
-          <main className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Inner content box centered */}
+          <div className="w-full max-w-5xl text-left px-4 md:px-0">
 
-            {/* General Gaming Section */}
-            <section className={panelClass}>
-              <div>
-                <div className="mb-4 inline-flex items-center">
-                  {/* High contrast labels */}
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
-                    Public Access
-                  </span>
+            {/* Dynamic Section Matrix Layout */}
+            <main className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+              {/* General Gaming Section */}
+              <section className={panelClass}>
+                <div>
+                  <div className="mb-4 inline-flex items-center">
+                    {/* High contrast labels */}
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
+                      Public Access
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">General Gaming</h2>
+                  <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
+                    My collected thoughts on gaming, art, and other nonsense.
+                  </p>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">General Gaming</h2>
-                <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
-                  My collected thoughts on gaming, art, and other nonsense.
-                </p>
-              </div>
-              <Link href="/home/gaming-central" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
-                Gaming Central →
-              </Link>
-            </section>
+                <Link href="/home/gaming-central" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
+                  Gaming Central →
+                </Link>
+              </section>
 
-            {/* Pirates campaign Section */}
-            <section className={panelClass}>
-              <div>
-                <div className="mb-4 inline-flex items-center">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
-                    Public Access
-                  </span>
+              {/* Pirates campaign Section */}
+              <section className={panelClass}>
+                <div>
+                  <div className="mb-4 inline-flex items-center">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
+                      Public Access
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">Pirates Campaign</h2>
+                  <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
+                    Campaign info on my Pirates Campaign.
+                  </p>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">Pirates Campaign</h2>
-                <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
-                  Campaign info on my Pirates Campaign.
-                </p>
-              </div>
-              <Link href="/home/campaigns/pirates" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
-                Pirates →
-              </Link>
-            </section>
+                <Link href="/home/campaigns/pirates" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
+                  Pirates →
+                </Link>
+              </section>
 
-            {/* Everward Campaign Section */}
-            <section className={panelClass}>
-              <div>
-                <div className="mb-4 inline-flex items-center">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
-                    Public Access
-                  </span>
+              {/* Everward Campaign Section */}
+              <section className={panelClass}>
+                <div>
+                  <div className="mb-4 inline-flex items-center">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950/10 dark:bg-amber-100/10 text-amber-950 dark:text-amber-200 border border-amber-950/20 dark:border-amber-100/20">
+                      Public Access
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">Everward Campaign</h2>
+                  <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
+                    Campaign info on my Everward Campaign.
+                  </p>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight mb-2 text-amber-950 dark:text-amber-100">Everward Campaign</h2>
-                <p className="text-sm text-amber-900/90 dark:text-amber-100/80 mb-6 leading-relaxed">
-                  Campaign info on my Everward Campaign.
-                </p>
-              </div>
-              <Link href="/home/campaigns/everward" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
-                Everward →
-              </Link>
-            </section>
+                <Link href="/home/campaigns/everward" className="w-full text-center py-2 text-xs font-bold uppercase tracking-wider bg-amber-800 hover:bg-amber-900 text-white rounded shadow-sm transition-colors cursor-pointer">
+                  Everward →
+                </Link>
+              </section>
 
-          </main>
+            </main>
+          </div>
+        </div>
+
+        {/* Lower Campaign Log Feature Block */}
+        <div className="pb-12 flex flex-col">
+          <div className="w-full max-w-5xl mx-0 md:mx-auto md:w-[85%] bg-[url('/parchment.jpg')] bg-cover bg-center p-6 md:p-8 rounded-none md:rounded-lg shadow-md border border-slate-800/20">
+            <ImageWrapCard
+              heading="Gaming Experiences: Tips and Ideas from a Veteran DM"
+              imageAlignment="center-right"
+              imageUrl="/Everward_1.png"
+              bodyText={bodText}
+              maxImageWidth='w-100'
+            />
+          </div>
         </div>
       </div>
-      
-      {/* Lower Campaign Log Feature Block */}
-      <div className="pb-12 flex flex-col">
-        <div className="w-full max-w-5xl mx-0 md:mx-auto md:w-[85%] bg-[url('/parchment.jpg')] bg-cover bg-center p-6 md:p-8 rounded-none md:rounded-lg shadow-md border border-slate-800/20">
-          <ImageWrapCard
-            heading="Gaming Experiences: Tips and Ideas from a Veteran DM"
-            imageAlignment="center-right"
-            imageUrl="/Everward_1.png"
-            bodyText={bodText}
-            maxImageWidth='w-100'
-          />
-        </div>
-      </div>
-
     </PageGuard>
   );
 }
