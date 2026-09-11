@@ -72,7 +72,7 @@ export default function EverwardCampaignPage() {
                   paragraph: 'A directory of the districts, places of import, and people therein.',
                   button: {
                     text: 'Go →',
-                    onClick: () => alert('Wandering the districts...'),
+                    onClick: () => router.push('/home/campaigns/everward/districts-of-everward'),
                   },
                 }}
                 col2={{
@@ -164,7 +164,7 @@ export default function EverwardCampaignPage() {
                   paragraph: `Places far and wide`,
                   button: {
                     text: 'Go →',
-                    onClick: () => alert(`Ramblin...`),
+                    onClick: () => router.push('/home/campaigns/everward/points-of-interest'),
                   },
                 }}
               />
